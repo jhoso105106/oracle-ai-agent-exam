@@ -6,6 +6,7 @@
   <title>Oracle Fusion AI Agent Studio (1Z0-1145-1-JPN) 模擬試験 4択問題集＆復習システム</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     .glass {
       background: rgba(255, 255, 255, 0.92);
@@ -47,6 +48,7 @@
           <i class="fa-regular fa-clock text-rose-300"></i>
           <span id="timer-display" class="font-mono text-sm font-semibold">60:00</span>
         </div>
+        <span id="sync-status" class="hidden md:inline text-[11px] text-slate-300">保存準備中</span>
       </div>
     </div>
   </header>
@@ -222,618 +224,1307 @@
   <script>
     // 50問の完全データ（PDF模試準拠）
     const quizData = [
-      // 第1部: コア機能の理解 (Q1-Q10)
+  {
+    "id": 1,
+    "section": 1,
+    "sectionTitle": "第1部: コア機能の理解",
+    "question": "Oracle AI Agent Studio で、実際にデプロイ可能な最小単位として最も適切なものはどれか。",
+    "isMulti": false,
+    "options": [
       {
-        id: 1, section: 1, sectionTitle: "第1部: コア機能の理解",
-        question: "Oracle AI Agent Studioにおいて、「実際にデプロイ可能な単位」となるコンポーネントはどれか。",
-        isMulti: false,
-        options: [
-          { text: "Topic (トピック)", correct: false },
-          { text: "Instructions (インストラクション)", correct: false },
-          { text: "Workflow (ワークフロー/エージェントチーム)", correct: true },
-          { text: "Tool (ツール)", correct: false }
-        ],
-        explanation: "公式ドキュメントでは「The workflow is the component that can be deployed for use.」と明記されており、単一のエージェントも複数のエージェントも、必ずワークフロー（エージェントチーム）に追加してからデプロイされます。"
+        "text": "Topic",
+        "correct": false
       },
       {
-        id: 2, section: 1, sectionTitle: "第1部: コア機能の理解",
-        question: "会話の代理として業務ユーザーの入力を受け取り、他のエージェント(群)に橋渡しするエージェントタイプはどれか。",
-        isMulti: false,
-        options: [
-          { text: "Supervisor agent", correct: false },
-          { text: "Specialist agent", correct: false },
-          { text: "User-proxy agent (会話型エージェント)", correct: true },
-          { text: "Utility agent", correct: false }
-        ],
-        explanation: "User-proxy agentは「Acts on behalf of a business user to provide input to another agent or group of agents. It's sometimes referred to as a conversational agent.」と定義されています。"
+        "text": "Instruction",
+        "correct": false
       },
       {
-        id: 3, section: 1, sectionTitle: "第1部: コア機能の理解",
-        question: "複数のエージェントを統括し、エージェントフロー内でどのエージェントを呼ぶかを判断する役割を持つエージェントタイプはどれか。",
-        isMulti: false,
-        options: [
-          { text: "User-proxy agent", correct: false },
-          { text: "Supervisor agent (スーパーバイザーエージェント)", correct: true },
-          { text: "Persona-based agent", correct: false },
-          { text: "Task-oriented agent", correct: false }
-        ],
-        explanation: "Supervisor agentは「Orchestrates the use of agents within an agentic flow.」と定義されており、他エージェントへのルーティングやオーケストレーションを担います。"
+        "text": "Workflow",
+        "correct": true
       },
       {
-        id: 4, section: 1, sectionTitle: "第1部: コア機能の理解",
-        question: "Oracle AI Agent Studioにおける Topics (トピック) の役割として最も正しいものはどれか。",
-        isMulti: false,
-        options: [
-          { text: "エージェントが利用可能なLLMモデルを指定する", correct: false },
-          { text: "エージェントの会話・能力の境界 (boundaries & constraints) を自然言語のインストラクションで定義する", correct: true },
-          { text: "エージェントが利用できる業務オブジェクトを直接制御する", correct: false },
-          { text: "エージェントのUIレイアウトをカスタマイズする", correct: false }
-        ],
-        explanation: "Topicsは「Defines the areas of expertise through instructions that set the boundaries and constraints for agent conversations and abilities.」と定義され、BenefitsエージェントにHSA・退職給付・株式プランなどの専門領域の境界を設定します。"
-      },
-      {
-        id: 5, section: 1, sectionTitle: "第1部: コア機能の理解",
-        question: "Instructions (インストラクション) に関する説明として最も正しいものはどれか。",
-        isMulti: false,
-        options: [
-          { text: "UIボタンのラベル定義に使う", correct: false },
-          { text: "トピックに対する自然言語のルール・条件を定義し、LLMに送られるプロンプトの一部となる", correct: true },
-          { text: "業務オブジェクトのフィールド一覧を定義する", correct: false },
-          { text: "外部REST APIの認証情報を格納する", correct: false }
-        ],
-        explanation: "Instructionsは「natural language rules that define the rules or conditions applied to a given topic. Instructions are part of the prompts that are sent to the underlying large language model.」と説明されています。"
-      },
-      {
-        id: 6, section: 1, sectionTitle: "第1部: コア機能の理解",
-        question: "以下のうち、AI Agent StudioのToolsとして提供されているものをすべて選べ。",
-        isMulti: false,
-        options: [
-          { text: "Business Object", correct: false },
-          { text: "Document Retrieval (RAG)", correct: false },
-          { text: "Email / Deep Link / External REST", correct: false },
-          { text: "上記すべて (Business Object, Document, Email, Deep Link, External REST等)", correct: true }
-        ],
-        explanation: "公式ドキュメントで挙げられているツールはCalculator, Connector, Email, Business Object, User Query, Document Retrieval (RAG), Deep Link, External REST, MCPなどです。"
-      },
-      {
-        id: 7, section: 1, sectionTitle: "第1部: コア機能の理解",
-        question: "Business Objectツールがエージェントに提供する機能はどれか。",
-        isMulti: false,
-        options: [
-          { text: "天気情報など外部SaaS APIとの接続", correct: false },
-          { text: "Fusion Applications内の業務オブジェクトレコードの取得・更新・作成・削除", correct: true },
-          { text: "カスタム文書のアップロードと自然言語検索", correct: false },
-          { text: "ユーザーをFusionの特定画面へ誘導するリンク生成", correct: false }
-        ],
-        explanation: "Business Object toolは「allow AI agents to retrieve, update, create, or delete business object records within Fusion Applications」と定義されています。"
-      },
-      {
-        id: 8, section: 1, sectionTitle: "第1部: コア機能の理解",
-        question: "ユーザーをFusion Applicationsの特定ページ (例: 住所変更ページ) に直接誘導するツールはどれか。",
-        isMulti: false,
-        options: [
-          { text: "Business Object tool", correct: false },
-          { text: "Connector", correct: false },
-          { text: "Deep Link tool", correct: true },
-          { text: "Email tool", correct: false }
-        ],
-        explanation: "Deep Link toolは「will send a user directly to the part of Fusion Applications where they can update underlying information.」と説明されています。"
-      },
-      {
-        id: 9, section: 1, sectionTitle: "第1部: コア機能の理解",
-        question: "User-proxy / Supervisor / Specialist の3分類とは別に、エージェントが持つ「特徴 (Characteristic)」として公式が挙げているものはどれか。",
-        isMulti: false,
-        options: [
-          { text: "Read-only agent (読取専用エージェント)", correct: false },
-          { text: "Persona-based agent (ペルソナベースエージェント)", correct: true },
-          { text: "Encrypted agent (暗号化エージェント)", correct: false },
-          { text: "Streaming agent (ストリーミングエージェント)", correct: false }
-        ],
-        explanation: "Persona-based agentは「Represents a specific role, such as benefits administrator, customer service representative, and finance administrator.」と説明されています。他にはTool user, Task-oriented agentが挙げられています。"
-      },
-      {
-        id: 10, section: 1, sectionTitle: "第1部: コア機能の理解",
-        question: "Oracle提供の事前構築済み (Preconfigured) エージェントテンプレートを利用するとき、テンプレート内の成果物 (エージェント・ツール・トピック) を直接編集できるか。",
-        isMulti: false,
-        options: [
-          { text: "すべて直接編集できる", correct: false },
-          { text: "直接は編集できない。編集するにはコピーを作成してチームに追加する必要がある", correct: true },
-          { text: "管理者権限があれば直接編集できる", correct: false },
-          { text: "一部のフィールドのみ直接編集できる", correct: false }
-        ],
-        explanation: "「When using a preconfigured agent team template, the artifacts such as agents, tools, and topics, aren't directly editable. To change these artifacts, you create a copy of the artifact and add the copy to the agent team.」と明記されています。"
-      },
-
-      // 第2部: エージェントの設定と導入 (Q11-Q20)
-      {
-        id: 11, section: 2, sectionTitle: "第2部: エージェントの設定と導入",
-        question: "エンドユーザーが公開されたAIエージェントをFusion Cloud内で探し、会話を開始できる「自己サービスハブ」の名称はどれか。",
-        isMulti: false,
-        options: [
-          { text: "Agent Marketplace", correct: false },
-          { text: "Agent Explorer", correct: true },
-          { text: "Agent Console", correct: false },
-          { text: "Agent Portal", correct: false }
-        ],
-        explanation: "Agent Explorerは「a self-service hub where end users can discover, search, and start conversations with any AI Agent that has been published and made available to them」と説明されています。(ナビゲーション: Me > Show More > AI Agent Studio)"
-      },
-      {
-        id: 12, section: 2, sectionTitle: "第2部: エージェントの設定と導入",
-        question: "Guided Journey (ガイドジャーニー) でAIエージェントを埋め込む場合、どの粒度で紐付けが可能か。",
-        isMulti: false,
-        options: [
-          { text: "ユーザーごとにのみ紐付け可能", correct: false },
-          { text: "ページレベルまたはセクションレベルで紐付け可能", correct: true },
-          { text: "Roleレベルにのみ紐付け可能", correct: false },
-          { text: "Family (HCM/ERP) レベルにのみ紐付け可能", correct: false }
-        ],
-        explanation: "Guided Journeyは「A Guided Journey can be attached to almost every Redwood page, either at page level or at a specific section level.」と説明されています。"
-      },
-      {
-        id: 13, section: 2, sectionTitle: "第2部: エージェントの設定と導入",
-        question: "Smart Actions / Visual Builder Studio によるエージェント埋込の特徴として正しいものはどれか。",
-        isMulti: false,
-        options: [
-          { text: "すべてのFusionモジュールで無条件に利用可能", correct: false },
-          { text: "コンテキスト対応 (context-sensitive) で、ページ上のデータを自動的に取り込む", correct: true },
-          { text: "モバイルアプリのみで動作する", correct: false },
-          { text: "事前構築済みエージェントには使えない", correct: false }
-        ],
-        explanation: "VB Studio / Smart Actionsによる埋込は「uniquely context-sensitive - they automatically detect and pull the data present on the page when a user queries them.」という強力な特徴を持ちます。"
-      },
-      {
-        id: 14, section: 2, sectionTitle: "第2部: エージェントの設定と導入",
-        question: "従業員データを更新するAIエージェントで、機微な変更を安全に管理するためにAI Agent Studio内で最も適切な仕組みはどれか。",
-        isMulti: false,
-        options: [
-          { text: "業務時間内だけ更新できるように時間制限をかける", correct: false },
-          { text: "重要データ変更の前に承認を求めるHuman-in-the-loop (レビュー) ステップを追加する", correct: true },
-          { text: "更新後に関係者へアラートメールを送信する", correct: false },
-          { text: "更新結果を毎日CSVに自動エクスポートする", correct: false }
-        ],
-        explanation: "AI Agent Studioでは「add an approval step for some actions that your AI agent will perform. The review step can be added at any point in the process for oversight and control over key actions, such as sending an email or updating a record.」と定義されており、事後通知ではなく事前承認ノードを挟むのが正解です。"
-      },
-      {
-        id: 15, section: 2, sectionTitle: "第2部: エージェントの設定と導入",
-        question: "サードパーティシステムとカスタム業務オブジェクトの両方にアクセスする必要があるエージェントを構築する最適な方法はどれか。",
-        isMulti: false,
-        options: [
-          { text: "事前構築テンプレートをコピーしてカスタマイズする", correct: false },
-          { text: "Emailツールだけを使う", correct: false },
-          { text: "外部生成AIサービスを呼び出しFusionエージェントは使わない", correct: false },
-          { text: "エージェントワークフローをゼロから作成し、必要なツールを組み合わせる", correct: true }
-        ],
-        explanation: "事前構築テンプレートでカバーできないカスタム要件（独自オブジェクト＋外部REST API）では、ワークフローをゼロから設計し、External RESTとBusiness Objectツールを組み合わせるのが公式推奨です。"
-      },
-      {
-        id: 16, section: 2, sectionTitle: "第2部: エージェントの設定と導入",
-        question: "内部・外部SaaS アプリケーションや公開APIに接続するために追加できるツールはどれか。",
-        isMulti: false,
-        options: [
-          { text: "Business Object tool", correct: false },
-          { text: "Deep Link tool", correct: false },
-          { text: "External REST tool", correct: true },
-          { text: "Document tool", correct: false }
-        ],
-        explanation: "External RESTツールは「You can connect to internal and external SaaS applications or public APIs using External REST tool.」と説明されています。"
-      },
-      {
-        id: 17, section: 2, sectionTitle: "第2部: エージェントの設定と導入",
-        question: "外部のMCPサーバーへ、REST wrapperやプラグインを追加開発せずに安全に接続できるツールはどれか。",
-        isMulti: false,
-        options: [
-          { text: "Connector", correct: false },
-          { text: "External REST", correct: false },
-          { text: "MCP tool (Model Context Protocol tool)", correct: true },
-          { text: "Deep Link", correct: false }
-        ],
-        explanation: "MCP toolは「You can use the Model Context Protocol (MCP) tool and securely connect to external MCP servers, without building additional REST wrappers or plugin logic.」と説明されています。"
-      },
-      {
-        id: 18, section: 2, sectionTitle: "第2部: エージェントの設定と導入",
-        question: "AI Agent Studioで作成できるConnectorの種類として、Oracleがドキュメントで挙げている組み合わせを選べ。(該当3種)",
-        isMulti: true,
-        options: [
-          { text: "SharePoint Connector", correct: true },
-          { text: "Web Crawler Connector", correct: true },
-          { text: "Custom Content Source Connector", correct: true },
-          { text: "SQL Direct Connector", correct: false }
-        ],
-        explanation: "ドキュメント「Create a Connector for AI Agents」には SharePoint / Web Crawler / Custom Content Source の3つが明記されています。SQL Directというコネクターは存在しません。"
-      },
-      {
-        id: 19, section: 2, sectionTitle: "第2部: エージェントの設定と導入",
-        question: "ワークフローエージェント (Workflow Agent Team) に関する説明として正しいものはどれか。",
-        isMulti: false,
-        options: [
-          { text: "LLMがすべての実行順序を毎回自律的に決定する", correct: false },
-          { text: "あらかじめ決められた順序でノードを実行する、決定論的 (deterministic) なオーケストレーション", correct: true },
-          { text: "デプロイはできず、テスト環境でのみ動作する", correct: false },
-          { text: "エージェントを1つしか含めることができない", correct: false }
-        ],
-        explanation: "Workflow型エージェントチームは「a sequence of nodes used for deterministic, rule-based orchestration of tasks in which every step is preconfigured.」と定義されています。"
-      },
-      {
-        id: 20, section: 2, sectionTitle: "第2部: エージェントの設定と導入",
-        question: "Workflowエージェントで使えるノード種別を大まかに分類したとき、Oracleブログが挙げている5カテゴリはどれか。",
-        isMulti: false,
-        options: [
-          { text: "AI / Logic / Data / Workflow Control / Communication", correct: true },
-          { text: "LLM / HTTP / DB / Loop / Email", correct: false },
-          { text: "Reader / Writer / Checker / Approver / Publisher", correct: false },
-          { text: "Input / Output / Compute / Storage / Network", correct: false }
-        ],
-        explanation: "公式ブログで、AI Nodes (Brain), Logic Nodes (Spine), Data Nodes (Connectors), Workflow Control Nodes (Choreographer), Communication Nodes (Messenger) の5カテゴリとして整理されています。"
-      },
-
-      // 第3部: 既製エージェントのカスタマイズ (Q21-Q28)
-      {
-        id: 21, section: 3, sectionTitle: "第3部: 既製エージェントのカスタマイズ",
-        question: "サプライチェーン担当者が Outbound Compliance Agent テンプレートを使用しつつ、新しい危険物規制に対応させたい。適切なカスタマイズ方法を2つ選べ。",
-        isMulti: true,
-        options: [
-          { text: "業務オブジェクトツールへのアクセスを削除する", correct: false },
-          { text: "特定の規制更新に対応するTopicを追加する", correct: true },
-          { text: "システムプロンプトを更新し、新しい規制要件の情報を反映する", correct: true },
-          { text: "セマンティック検索を手動ドキュメント検索に置き換える", correct: false }
-        ],
-        explanation: "既製エージェントのカスタマイズは「Topicの追加」と「システムプロンプトの調整」が王道です。ツールを削除したりセマンティック検索を外すのは誤りです。"
-      },
-      {
-        id: 22, section: 3, sectionTitle: "第3部: 既製エージェントのカスタマイズ",
-        question: "セールスリーダーがエージェントに「自社のトーンに合わせた顧客コミュニケーション」を生成させたい。適切なカスタマイズを2つ選べ。",
-        isMulti: true,
-        options: [
-          { text: "さまざまな顧客対応シナリオを表すTopicを追加する", correct: true },
-          { text: "LLMベースのコンテンツ生成を無効化する", correct: false },
-          { text: "エージェントを社内通知のみに制限する", correct: false },
-          { text: "システムプロンプトにトーン・言語の好みを明記する", correct: true }
-        ],
-        explanation: "トーンやスタイルの制御はプロンプトエンジニアリングの基本であり、「System Promptへの記述」と「シナリオ別Topicの追加」で対応します。"
-      },
-      {
-        id: 23, section: 3, sectionTitle: "第3部: 既製エージェントのカスタマイズ",
-        question: "事前構築済みテンプレートを使う際にサポートされている2つのアクションはどれか。",
-        isMulti: true,
-        options: [
-          { text: "Oracle提供テンプレートのカタログを使って迅速に設定・デプロイする", correct: true },
-          { text: "外部クラウドから既存エージェントをインポートしてテンプレート化する", correct: false },
-          { text: "単一エージェントのワークフローを業務要件に合わせて設計する", correct: true },
-          { text: "一定期間経過後に非アクティブなテンプレートを自動削除する", correct: false }
-        ],
-        explanation: "事前テンプレートは迅速なデプロイ(rapid configuration & deployment)と、業務に合わせたワークフロー設計(単一・複数エージェント)に用いられます。"
-      },
-      {
-        id: 24, section: 3, sectionTitle: "第3部: 既製エージェントのカスタマイズ",
-        question: "プロンプト設計における「境界 (boundaries) を明示する」ことが重要とされる理由として最も適切なものはどれか。",
-        isMulti: false,
-        options: [
-          { text: "応答時間を短縮できるから", correct: false },
-          { text: "境界がないとエージェントが持たない能力を「幻覚 (hallucinate)」してしまうから", correct: true },
-          { text: "LLMプロバイダーの請求額を抑えられるから", correct: false },
-          { text: "UI表示が最適化されるから", correct: false }
-        ],
-        explanation: "「Without boundaries, agents overstep their scope, hallucinate capabilities they don't have, or fail silently」と明記されており、ハルシネーションやスコープ逸脱の防止が主目的です。"
-      },
-      {
-        id: 25, section: 3, sectionTitle: "第3部: 既製エージェントのカスタマイズ",
-        question: "システムプロンプトやTopicに絶対に含めてはいけないものはどれか。",
-        isMulti: false,
-        options: [
-          { text: "アクションを促す動詞", correct: false },
-          { text: "業務ドメインの用語定義", correct: false },
-          { text: "実在する従業員名・ID等のPII (個人情報)", correct: true },
-          { text: "LLMへの制約条件", correct: false }
-        ],
-        explanation: "「Never Use PII in Prompts. System prompts and topics are configuration, not runtime data. Never embed real employee names, IDs, or personal information. Use tool calls to retrieve user-specific data at runtime.」と明記されています。"
-      },
-      {
-        id: 26, section: 3, sectionTitle: "第3部: 既製エージェントのカスタマイズ",
-        question: "HRチームが従業員向けに医療・歯科・視力の福利厚生に関する質問に答えるセルフサービスエージェントを提供したい。最適な事前構築テンプレートはどれか。",
-        isMulti: false,
-        options: [
-          { text: "Compensation Agent", correct: false },
-          { text: "Benefits Agent", correct: true },
-          { text: "Payslip Agent", correct: false },
-          { text: "Personal and Employment Details Agent", correct: false }
-        ],
-        explanation: "福利厚生 (medical, dental, vision benefits) に対応する事前構築エージェントは「Benefits Agent」です。"
-      },
-      {
-        id: 27, section: 3, sectionTitle: "第3部: 既製エージェントのカスタマイズ",
-        question: "Fusion HCMで、チームメンバー間の給与進捗・追加報酬・意思決定の比較を、市場ベンチマークに基づいて確認できる事前構築エージェントはどれか。",
-        isMulti: false,
-        options: [
-          { text: "Payslip Agent", correct: false },
-          { text: "Compensation Agent", correct: true },
-          { text: "Benefits Agent", correct: false },
-          { text: "Personal and Employment Details Agent", correct: false }
-        ],
-        explanation: "給与進捗(salary progression)、追加報酬、市場トレンド比較を行うのは「Compensation Agent」です。(Payslipは給与明細の照会)"
-      },
-      {
-        id: 28, section: 3, sectionTitle: "第3部: 既製エージェントのカスタマイズ",
-        question: "事前テンプレートの成果物 (artifacts) を実際に編集するときの正しい手順はどれか。",
-        isMulti: false,
-        options: [
-          { text: "テンプレートに含まれる元エージェントを直接開いて上書き保存する", correct: false },
-          { text: "元の成果物のコピーを作成 → コピーを編集 → 元をチームから削除 → コピーをチームに追加する", correct: true },
-          { text: "サポートリクエストを起票し、Oracleにテンプレートを書き換えてもらう", correct: false },
-          { text: "LLMプロバイダーを変更するだけでよい", correct: false }
-        ],
-        explanation: "「To edit the artifacts... create a copy of the artifact and edit it. After editing, remove the original artifact from the agent team, and then add the copy you created.」と明記されています。"
-      },
-
-      // 第4部: エージェントの評価とテスト (Q29-Q36)
-      {
-        id: 29, section: 4, sectionTitle: "第4部: エージェントの評価とテスト",
-        question: "エージェントテストのために評価テストデータ (Evaluation Set) を使う正しい方法はどれか。",
-        isMulti: false,
-        options: [
-          { text: "評価セットで、実行時にどのビジネスオブジェクトが利用可能かを決める", correct: false },
-          { text: "評価テストデータを使ってLLM自体を自動的にファインチューニングする", correct: false },
-          { text: "テスト入力と参照回答 (reference answers) のコレクションをアップロードし、オフラインテストでエージェント応答を比較採点する", correct: true },
-          { text: "本番トラフィックをリダイレクトして評価する", correct: false }
-        ],
-        explanation: "評価セットは質問と期待回答のペアで構成され、本番前のオフライン環境でエージェントの回答精度をベンチマーク測定するために使います。"
-      },
-      {
-        id: 30, section: 4, sectionTitle: "第4部: エージェントの評価とテスト",
-        question: "評価セットの実行モードとして「前の質問の文脈が次の質問に影響する」場合に選ぶべきモードはどれか。",
-        isMulti: false,
-        options: [
-          { text: "Sequential (順序保持実行)", correct: true },
-          { text: "Random (ランダム実行)", correct: false },
-          { text: "Parallel (並列実行)", correct: false },
-          { text: "Recursive (再帰実行)", correct: false }
-        ],
-        explanation: "「Sequential: Runs questions in the exact order you define. Use this when later questions depend on the context from earlier ones.」と定義されています。"
-      },
-      {
-        id: 31, section: 4, sectionTitle: "第4部: エージェントの評価とテスト",
-        question: "評価セットへ質問と期待回答を追加する方法としてサポートされていないものはどれか。",
-        isMulti: false,
-        options: [
-          { text: "CSVファイルのアップロード (Column1=質問、Column2=期待回答)", correct: false },
-          { text: "Debug Chatウィンドウからの追加", correct: false },
-          { text: "画面上での手動入力", correct: false },
-          { text: "本番監視ログからの自動抽出・登録", correct: true }
-        ],
-        explanation: "公式ブログでは、手動入力・CSVアップロード・Debug Chatウィンドウの3通りが挙げられており、監視ログから全自動で吸い上げる機能はありません。"
-      },
-      {
-        id: 32, section: 4, sectionTitle: "第4部: エージェントの評価とテスト",
-        question: "「エージェントの回答が、取得されたソースコンテンツにどれだけ忠実か（捏造がないか）」を測るRAG関連メトリクスはどれか。",
-        isMulti: false,
-        options: [
-          { text: "Answer Relevance", correct: false },
-          { text: "Context Relevance", correct: false },
-          { text: "Groundedness", correct: true },
-          { text: "Error Rate", correct: false }
-        ],
-        explanation: "Groundednessは「Alignment of the generated answer with the retrieved source content, indicating how faithfully the response reflects the supporting information.」と定義されています。"
-      },
-      {
-        id: 33, section: 4, sectionTitle: "第4部: エージェントの評価とテスト",
-        question: "「検索・取得した情報の質と適切さ、参照される証拠として信頼に足るか」を測るRAG指標はどれか。",
-        isMulti: false,
-        options: [
-          { text: "Groundedness", correct: false },
-          { text: "Context Relevance", correct: true },
-          { text: "Answer Relevance", correct: false },
-          { text: "Session Count", correct: false }
-        ],
-        explanation: "Context Relevanceは「Quality and appropriateness of the retrieved information, assessing whether it meets the necessary standards to be considered reliable evidence.」と定義されています。"
-      },
-      {
-        id: 34, section: 4, sectionTitle: "第4部: エージェントの評価とテスト",
-        question: "「回答がユーザーの質問にどれだけ直接的・十分・正確に応えているか」を測る指標はどれか。",
-        isMulti: false,
-        options: [
-          { text: "Groundedness", correct: false },
-          { text: "Answer Relevance", correct: true },
-          { text: "Context Relevance", correct: false },
-          { text: "Total Tokens", correct: false }
-        ],
-        explanation: "Answer Relevanceは「Degree to which the answer directly addresses the user's question, measuring how fully and precisely the content covers the required subject matter.」と定義されています。"
-      },
-      {
-        id: 35, section: 4, sectionTitle: "第4部: エージェントの評価とテスト",
-        question: "構造化されたエージェントテストにおいて必須となる2つの機能はどれか。",
-        isMulti: true,
-        options: [
-          { text: "評価テストデータ管理 (テストケースの保存・セット化)", correct: true },
-          { text: "評価ランの比較 (バージョン間・設定変更時の性能比較)", correct: true },
-          { text: "アクセス用のロールベース資格情報の動的スワップ", correct: false },
-          { text: "アプリケーションサーバのオーバークロック", correct: false }
-        ],
-        explanation: "エージェント評価の柱は「Evaluation Setによるテストケースの蓄積管理」と「Run Comparisonによるモデルやプロンプト変更前後の精度比較」です。"
-      },
-      {
-        id: 36, section: 4, sectionTitle: "第4部: エージェントの評価とテスト",
-        question: "Correctness (正確性) メトリクスに関して正しい説明はどれか。",
-        isMulti: false,
-        options: [
-          { text: "すべての本番監視ダッシュボードで常時リアルタイム表示される", correct: false },
-          { text: "エージェントの回答と評価セットの参照回答を比較し、0〜1のスコアで採点される", correct: true },
-          { text: "常に人間だけがスコア付けを行い、LLMは関与しない", correct: false },
-          { text: "消費されたトークン使用量を測る指標である", correct: false }
-        ],
-        explanation: "Correctnessは「Each score (0-1) is computed by comparing the agent's answer to the reference answer provided in the evaluation set.」と定義され、評価専用（Evaluation）のメトリクスです。"
-      },
-
-      // 第5部: エージェントの監視 (Q37-Q43)
-      {
-        id: 37, section: 5, sectionTitle: "第5部: エージェントの監視",
-        question: "経営陣が「エラー発生頻度、大半のクエリの解決速度、エージェントの品質」を四半期レビュー用にダッシュボードで見たい。適切な指標の組み合わせを2つ選べ。",
-        isMulti: true,
-        options: [
-          { text: "Prompt Injection", correct: false },
-          { text: "LLM Requests", correct: false },
-          { text: "Median Correctness (品質)", correct: true },
-          { text: "Error Rate と Median / P99 Latency (エラー率と応答時間)", correct: true }
-        ],
-        explanation: "エラー頻度＝Error Rate、解決速度＝Latency (Median / P99)、品質＝Median Correctness が対応します。"
-      },
-      {
-        id: 38, section: 5, sectionTitle: "第5部: エージェントの監視",
-        question: "補償プランニングエージェントの品質と利用状況を継続的に単一の画面で確認したい。使うべき機能はどれか。",
-        isMulti: false,
-        options: [
-          { text: "Debug Chatウィンドウ", correct: false },
-          { text: "Monitoring and Evaluationタブ", correct: true },
-          { text: "Marketplaceタブ", correct: false },
-          { text: "Credentialsタブ", correct: false }
-        ],
-        explanation: "公式ドキュメントで「Aggregate the metrics that are displayed on the Monitoring and Evaluation tab in AI Agent Studio.」と説明されており、このタブが一元管理画面となります。"
-      },
-      {
-        id: 39, section: 5, sectionTitle: "第5部: エージェントの監視",
-        question: "ダッシュボードのメトリクスを更新・集計するために定期実行するスケジュール済みプロセスの名称はどれか。",
-        isMulti: false,
-        options: [
-          { text: "Refresh AI Agent Dashboard", correct: false },
-          { text: "Aggregate AI Agent Usage and Metrics", correct: true },
-          { text: "Compute Agent KPIs", correct: false },
-          { text: "Run Evaluation Nightly", correct: false }
-        ],
-        explanation: "「Run the Aggregate AI Agent Usage and Metrics scheduled process.」と明記されており、日次などでこのプロセスをスケジュール実行することでダッシュボードが最新化されます。"
-      },
-      {
-        id: 40, section: 5, sectionTitle: "第5部: エージェントの監視",
-        question: "P99 Latency の意味として最も正しいものはどれか。",
-        isMulti: false,
-        options: [
-          { text: "全ユーザーの平均応答時間", correct: false },
-          { text: "99%のユーザーが体感する最大待ち時間 (ミリ秒)", correct: true },
-          { text: "LLMプロバイダのSLA上限値", correct: false },
-          { text: "最速1%のユーザーだけが体感する最小待ち時間", correct: false }
-        ],
-        explanation: "P99 Latencyは「The maximum wait time in milliseconds for 99% of users, revealing any areas where you should review and optimize」と定義されています。"
-      },
-      {
-        id: 41, section: 5, sectionTitle: "第5部: エージェントの監視",
-        question: "以下のメトリクスのうち、「監視 (Monitoring)」では利用でき、「評価 (Evaluation)」では利用できないものはどれか。",
-        isMulti: false,
-        options: [
-          { text: "Error Rate", correct: false },
-          { text: "Input Token Count", correct: true },
-          { text: "P99 Latency", correct: false },
-          { text: "Session Count", correct: false }
-        ],
-        explanation: "公式メトリクス対比表において、Input Token Countは「Available to Evaluate: No / Available to Monitor: Yes」となっています。"
-      },
-      {
-        id: 42, section: 5, sectionTitle: "第5部: エージェントの監視",
-        question: "監視画面で確認できる Error Count とは何を意味するか。",
-        isMulti: false,
-        options: [
-          { text: "LLMが返したトークンエラーの文字数", correct: false },
-          { text: "記録されたエラーの合計数 (Total number of errors recorded)", correct: true },
-          { text: "設定されたトークン数の上限値", correct: false },
-          { text: "アクセス拒否が発生した回数", correct: false }
-        ],
-        explanation: "Error Countは「Total number of errors recorded.」とシンプルに定義されています。"
-      },
-      {
-        id: 43, section: 5, sectionTitle: "第5部: エージェントの監視",
-        question: "監視・評価で確認できる Session Count の定義として最も近いものはどれか。",
-        isMulti: false,
-        options: [
-          { text: "ワークフローのデプロイ回数", correct: false },
-          { text: "ユーザーとAIエージェントの間で行われたユニークな会話セッションの総数", correct: true },
-          { text: "ノードの総実行回数", correct: false },
-          { text: "業務オブジェクトの読み取り回数", correct: false }
-        ],
-        explanation: "Session Countは「The number of unique conversational sessions between a user and an AI agent. One session can include multiple messages or evaluation runs.」と定義されています。"
-      },
-
-      // 第6部: セキュリティの実装 (Q44-Q50)
-      {
-        id: 44, section: 6, sectionTitle: "第6部: セキュリティの実装",
-        question: "データ検索するエージェントに、最新かつ正確なデータへのアクセスをセキュアに与えたい。最も適切な方法はどれか。",
-        isMulti: false,
-        options: [
-          { text: "エージェントのデータへのアクセスを完全にマスクする", correct: false },
-          { text: "データ重複を避けるため、Fusion外で運用する", correct: false },
-          { text: "利便性のため広範なデータエクスポートを許可する", correct: false },
-          { text: "Fusion内のBusiness Objectにアクセスさせ、セキュアな場所にあるデータを直接参照する", correct: true }
-        ],
-        explanation: "Business Objectツールは「AI agents adhere to the native security and role-based access controls of Fusion Applications, ensuring protection and privacy for your enterprise data.」と説明され、FusionネイティブのRBACにより安全性が担保されます。"
-      },
-      {
-        id: 45, section: 6, sectionTitle: "第6部: セキュリティの実装",
-        question: "各エージェントが使えるデータをきめ細かく制御する機能として最も適切なものはどれか。",
-        isMulti: false,
-        options: [
-          { text: "事前構築されたシステムプロンプト", correct: false },
-          { text: "REST toolで定義される統合設定", correct: false },
-          { text: "Document toolのフォルダ権限", correct: false },
-          { text: "FusionのRole-Based Access Control (RBAC)", correct: true }
-        ],
-        explanation: "AI Agent StudioはFusion Applicationsの職務ロール・データセキュリティ（RBAC）を継承するため、アクセス制御の基盤はRBACです。"
-      },
-      {
-        id: 46, section: 6, sectionTitle: "第6部: セキュリティの実装",
-        question: "AI Agent StudioでExternal REST APIツールを作成できるようにするために、カスタムロールに追加すべき特権 (Privilege) はどれか。",
-        isMulti: false,
-        options: [
-          { text: "ORA_FND_ADMIN_PRIV", correct: false },
-          { text: "ORA_FND_TRAP_PRIV (Create and Edit Backends for Visual Builder Studio)", correct: true },
-          { text: "ORA_HCM_USER_PRIV", correct: false },
-          { text: "ORA_SEC_CONSOLE_PRIV", correct: false }
-        ],
-        explanation: "「To create External REST API tools in AI Agent Studio, the Create and Edit Backends for Visual Builder Studio (ORA_FND_TRAP_PRIV) privilege must be added to the custom role assigned to the user.」と明記されています。"
-      },
-      {
-        id: 47, section: 6, sectionTitle: "第6部: セキュリティの実装",
-        question: "Security Consoleが権限グループ (Permission Groups) と連携するためにサイトレベルで設定が必要なプロファイル・オプションはどれか。",
-        isMulti: false,
-        options: [
-          { text: "ORA_HCM_ENABLE_ALL_AGENTS", correct: false },
-          { text: "ORA_FUSION_ENABLE_AGENT_STUDIO", correct: false },
-          { text: "ORA_ASE_SAS_INTEGRATION_ENABLED (Enable Security Console External Application Integration)", correct: true },
-          { text: "ORA_AI_AGENT_PERMISSION_MODE", correct: false }
-        ],
-        explanation: "「set the Enable Security Console External Application Integration (ORA_ASE_SAS_INTEGRATION_ENABLED) profile option at the site level.」と明記されています。"
-      },
-      {
-        id: 48, section: 6, sectionTitle: "第6部: セキュリティの実装",
-        question: "AI Agent Studioへのアクセス権を有効化する前に、LDAPからのリソース情報取り込みのために順に実行する必要がある2つのスケジュール済みプロセスはどれか。",
-        isMulti: false,
-        options: [
-          { text: "Import Resource Application Security Data → Import User and Role Application Security Data", correct: true },
-          { text: "Aggregate AI Agent Usage → Index AI Agent Studio Assistant Objects", correct: false },
-          { text: "Compile Roles → Sync Fusion Directory", correct: false },
-          { text: "Refresh LDAP → Sync AI Agent Metadata", correct: false }
-        ],
-        explanation: "公式ドキュメントに「run these two scheduled processes sequentially: 1. Import Resource Application Security Data 2. Import User and Role Application Security Data」と記載されています。"
-      },
-      {
-        id: 49, section: 6, sectionTitle: "第6部: セキュリティの実装",
-        question: "統合されたAI Help Agentを利用可能にするために毎日実行するスケジュール済みプロセスの組み合わせはどれか。",
-        isMulti: false,
-        options: [
-          { text: "Aggregate AI Agent Usage / Import User Data", correct: false },
-          { text: "Index AI Agent Studio Assistant Documents / Index AI Agent Studio Assistant Objects and Attributes", correct: true },
-          { text: "Rebuild Prompt Cache / Refresh Access Rules", correct: false },
-          { text: "Compile Agent Team / Publish Agent Team", correct: false }
-        ],
-        explanation: "「To use the integrated AI help agent, run these two scheduled processes daily: Index AI Agent Studio Assistant Documents / Index AI Agent Studio Assistant Objects and Attributes」と明記されています。"
-      },
-      {
-        id: 50, section: 6, sectionTitle: "第6部: セキュリティの実装",
-        question: "エンドユーザーが公開されたAIエージェントを画面上で見つけて利用できるようにするために必要な条件を2つ選べ。",
-        isMulti: true,
-        options: [
-          { text: "エージェントに割り当てられたセキュリティが、ユーザーのアクセス条件と一致していること", correct: true },
-          { text: "管理者によってエージェントが公開 (Publish) されていること", correct: true },
-          { text: "ユーザーがLLMプロバイダの直接アカウントを持っていること", correct: false },
-          { text: "ユーザーがAgent Studioの管理者ロールを持っていること", correct: false }
-        ],
-        explanation: "「An end-user can only see an agent if: The security assigned to the agent matches the user's access criteria, AND The agent has been published by an administrator.」と明記されています。"
+        "text": "Tool",
+        "correct": false
       }
-    ];
+    ],
+    "explanation": "デプロイ対象はワークフローです。トピックやツールは補助要素で、実運用単位としてはエージェントチームまたはワークフローにまとめて配置します。"
+  },
+  {
+    "id": 2,
+    "section": 1,
+    "sectionTitle": "第1部: コア機能の理解",
+    "question": "ビジネスユーザーの会話を受け取り、他のエージェントへ入力を渡す役割に最も近いものはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "Supervisor agent",
+        "correct": false
+      },
+      {
+        "text": "Specialist agent",
+        "correct": false
+      },
+      {
+        "text": "User-proxy agent",
+        "correct": true
+      },
+      {
+        "text": "Utility agent",
+        "correct": false
+      }
+    ],
+    "explanation": "User-proxy agent はユーザーを代理して会話を受け、必要に応じて他エージェントへ橋渡しする役割です。"
+  },
+  {
+    "id": 3,
+    "section": 1,
+    "sectionTitle": "第1部: コア機能の理解",
+    "question": "複数エージェントを統括し、どのエージェントに処理を振るかを判断する役割を担うのはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "User-proxy agent",
+        "correct": false
+      },
+      {
+        "text": "Supervisor agent",
+        "correct": true
+      },
+      {
+        "text": "Tool user",
+        "correct": false
+      },
+      {
+        "text": "Persona-based agent",
+        "correct": false
+      }
+    ],
+    "explanation": "Supervisor agent はエージェントフロー内でオーケストレーションを行い、他のエージェントへのルーティングと制御を担当します。"
+  },
+  {
+    "id": 4,
+    "section": 1,
+    "sectionTitle": "第1部: コア機能の理解",
+    "question": "Topic の主な役割として最も適切なものはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "利用可能な LLM モデルの指定",
+        "correct": false
+      },
+      {
+        "text": "エージェントの責務範囲と制約を自然言語で定義すること",
+        "correct": true
+      },
+      {
+        "text": "エージェントの画面レイアウトを決めること",
+        "correct": false
+      },
+      {
+        "text": "業務データの直接更新を行うこと",
+        "correct": false
+      }
+    ],
+    "explanation": "Topic は、どの領域にどこまで責任を持つかを自然言語で定義する境界設定の役割が中心です。"
+  },
+  {
+    "id": 5,
+    "section": 1,
+    "sectionTitle": "第1部: コア機能の理解",
+    "question": "Instruction に関する説明として最も適切なものはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "UI のボタンラベルを定義するために使う",
+        "correct": false
+      },
+      {
+        "text": "Topic に対するルールや条件を自然言語で定義し、LLM に渡すプロンプトに含める",
+        "correct": true
+      },
+      {
+        "text": "業務オブジェクトのフィールド定義を行う",
+        "correct": false
+      },
+      {
+        "text": "社外 API の秘密鍵を保存する場所である",
+        "correct": false
+      }
+    ],
+    "explanation": "Instruction は、Topic をどのように扱うかを指示する自然言語ルールであり、プロンプトの一部として LLM へ渡されます。"
+  },
+  {
+    "id": 6,
+    "section": 1,
+    "sectionTitle": "第1部: コア機能の理解",
+    "question": "AI Agent Studio のツールとして該当しないものはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "Business Object",
+        "correct": false
+      },
+      {
+        "text": "Document Retrieval",
+        "correct": false
+      },
+      {
+        "text": "Email",
+        "correct": false
+      },
+      {
+        "text": "Workflow Designer",
+        "correct": true
+      }
+    ],
+    "explanation": "Workflow Designer は構築ツールの一部であり、Agent Studio が提供するツールのカテゴリというよりは実行構造の設計手段です。"
+  },
+  {
+    "id": 7,
+    "section": 1,
+    "sectionTitle": "第1部: コア機能の理解",
+    "question": "Business Object ツールが担う典型的な働きとして最も適切なものはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "Fusion 内のビジネスデータを取得・更新・作成・削除する",
+        "correct": true
+      },
+      {
+        "text": "外部 SaaS の天気予報を呼び出す",
+        "correct": false
+      },
+      {
+        "text": "コンテンツをアップロードして全文検索する",
+        "correct": false
+      },
+      {
+        "text": "ユーザーを特定画面へ誘導するリンクを生成する",
+        "correct": false
+      }
+    ],
+    "explanation": "Business Object は Fusion Applications の業務オブジェクトに対して CRUD を行うための接続手段です。"
+  },
+  {
+    "id": 8,
+    "section": 1,
+    "sectionTitle": "第1部: コア機能の理解",
+    "question": "ユーザーを Fusion の特定画面へ直接遷移させたいときに最も適したツールはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "Business Object",
+        "correct": false
+      },
+      {
+        "text": "Deep Link",
+        "correct": true
+      },
+      {
+        "text": "Document Retrieval",
+        "correct": false
+      },
+      {
+        "text": "Connector",
+        "correct": false
+      }
+    ],
+    "explanation": "Deep Link は該当業務ページへ直接飛ばすための導線であり、データ操作よりもナビゲーションに適します。"
+  },
+  {
+    "id": 9,
+    "section": 1,
+    "sectionTitle": "第1部: コア機能の理解",
+    "question": "User-proxy / Supervisor / Specialist という分類とは別に、エージェントの特徴として公式で強調されるものはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "Read-only agent",
+        "correct": false
+      },
+      {
+        "text": "Persona-based agent",
+        "correct": true
+      },
+      {
+        "text": "Streaming agent",
+        "correct": false
+      },
+      {
+        "text": "Encrypted agent",
+        "correct": false
+      }
+    ],
+    "explanation": "Persona-based agent は特定の役割や担当者として振る舞うことを表し、業務文脈に応じた振る舞いを持ちます。"
+  },
+  {
+    "id": 10,
+    "section": 1,
+    "sectionTitle": "第1部: コア機能の理解",
+    "question": "Oracle 提供の事前構築テンプレートを編集したい場合、最も適切な手順はどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "テンプレートに直接変更を加える",
+        "correct": false
+      },
+      {
+        "text": "テンプレートのコピーを作成し、そのコピーを編集してチームへ追加する",
+        "correct": true
+      },
+      {
+        "text": "サポートに修正依頼を出す",
+        "correct": false
+      },
+      {
+        "text": "関連する全ツールを一度削除する",
+        "correct": false
+      }
+    ],
+    "explanation": "事前構築テンプレート群は元の成果物を直接変更できず、コピーをベースに改修して採用する形が正しい運用です。"
+  },
+  {
+    "id": 11,
+    "section": 2,
+    "sectionTitle": "第2部: エージェントの設定と導入",
+    "question": "エンドユーザーが公開済みの AI エージェントを見つけて会話を開始するためのハブとして最も適切なものはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "Agent Console",
+        "correct": false
+      },
+      {
+        "text": "Agent Explorer",
+        "correct": true
+      },
+      {
+        "text": "Agent Marketplace",
+        "correct": false
+      },
+      {
+        "text": "Agent Portal",
+        "correct": false
+      }
+    ],
+    "explanation": "Agent Explorer は公開された AI エージェントを探索し、会話を開始させる自己サービスの入口です。"
+  },
+  {
+    "id": 12,
+    "section": 2,
+    "sectionTitle": "第2部: エージェントの設定と導入",
+    "question": "Guided Journey に AI エージェントを埋め込む場合、最も適切な紐付け粒度はどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "ユーザーごとに固定される",
+        "correct": false
+      },
+      {
+        "text": "ページ単位またはセクション単位で行える",
+        "correct": true
+      },
+      {
+        "text": "ロールのみで固定される",
+        "correct": false
+      },
+      {
+        "text": "業務領域単位のみで固定される",
+        "correct": false
+      }
+    ],
+    "explanation": "Guided Journey は Redwood のページや特定セクションに埋め込む設計が可能です。"
+  },
+  {
+    "id": 13,
+    "section": 2,
+    "sectionTitle": "第2部: エージェントの設定と導入",
+    "question": "Smart Actions / Visual Builder Studio の埋め込みで重要な特徴として最も適切なものはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "すべての Fusion モジュールで同一仕様で動作する",
+        "correct": false
+      },
+      {
+        "text": "画面の文脈を自動的に捉えてデータを取り込む",
+        "correct": true
+      },
+      {
+        "text": "モバイルアプリでのみ利用できる",
+        "correct": false
+      },
+      {
+        "text": "事前構築テンプレートには使えない",
+        "correct": false
+      }
+    ],
+    "explanation": "コンテキスト感応型の埋め込みは、その画面に表示されているデータを自動で参照する点が大きな特徴です。"
+  },
+  {
+    "id": 14,
+    "section": 2,
+    "sectionTitle": "第2部: エージェントの設定と導入",
+    "question": "従業員情報の更新を行うエージェントで、重要な変更を安全に管理したい場合に最も適切な設計はどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "更新時間を夜間に限定する",
+        "correct": false
+      },
+      {
+        "text": "重要な更新前に Human-in-the-loop の承認ステップを置く",
+        "correct": true
+      },
+      {
+        "text": "変更後に通知メールを送るだけにする",
+        "correct": false
+      },
+      {
+        "text": "更新したデータを毎日 CSV に出力する",
+        "correct": false
+      }
+    ],
+    "explanation": "重要なアクションには承認レビューを組み込むのが正しい設計です。事後通知よりも事前承認の方が制御が明確です。"
+  },
+  {
+    "id": 15,
+    "section": 2,
+    "sectionTitle": "第2部: エージェントの設定と導入",
+    "question": "カスタム業務オブジェクトと社外 API の両方にアクセスする要件がある場合、最も適切な設計はどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "既存テンプレートをそのまま使う",
+        "correct": false
+      },
+      {
+        "text": "Email ツールだけを活用する",
+        "correct": false
+      },
+      {
+        "text": "外部生成 AI に直接接続して Fusion を使わない",
+        "correct": false
+      },
+      {
+        "text": "ワークフローを新規作成し、必要なツールを組み合わせる",
+        "correct": true
+      }
+    ],
+    "explanation": "独自要件では、テンプレート固定では不足しやすく、必要ツールを組み合わせた新規ワークフロー設計が適切です。"
+  },
+  {
+    "id": 16,
+    "section": 2,
+    "sectionTitle": "第2部: エージェントの設定と導入",
+    "question": "社内または社外の SaaS アプリケーションや公開 API へ接続するために使うツールとして最も適切なのはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "Business Object",
+        "correct": false
+      },
+      {
+        "text": "Deep Link",
+        "correct": false
+      },
+      {
+        "text": "External REST",
+        "correct": true
+      },
+      {
+        "text": "Document tool",
+        "correct": false
+      }
+    ],
+    "explanation": "External REST は公開 API や外部 SaaS へ接続する際の標準的な手段です。"
+  },
+  {
+    "id": 17,
+    "section": 2,
+    "sectionTitle": "第2部: エージェントの設定と導入",
+    "question": "REST のラッパーや追加開発を行わずに、外部 MCP サーバーへ安全に接続したい場合に最も適切なのはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "Connector",
+        "correct": false
+      },
+      {
+        "text": "External REST",
+        "correct": false
+      },
+      {
+        "text": "MCP tool",
+        "correct": true
+      },
+      {
+        "text": "Deep Link",
+        "correct": false
+      }
+    ],
+    "explanation": "MCP tool は外部 MCP サーバーへの接続を標準方式で扱えるため、個別ラッパー開発が不要です。"
+  },
+  {
+    "id": 18,
+    "section": 2,
+    "sectionTitle": "第2部: エージェントの設定と導入",
+    "question": "AI Agent Studio で作成できる Connector として、正しい組み合わせを選べ。",
+    "isMulti": true,
+    "options": [
+      {
+        "text": "SharePoint Connector",
+        "correct": true
+      },
+      {
+        "text": "Web Crawler Connector",
+        "correct": true
+      },
+      {
+        "text": "Custom Content Source Connector",
+        "correct": true
+      },
+      {
+        "text": "SQL Direct Connector",
+        "correct": false
+      }
+    ],
+    "explanation": "公式な Connector の例として SharePoint、Web Crawler、Custom Content Source が挙げられます。"
+  },
+  {
+    "id": 19,
+    "section": 2,
+    "sectionTitle": "第2部: エージェントの設定と導入",
+    "question": "Workflow agent team の特徴として最も適切なものはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "ノードの実行順序を事前に決めた決定論的なオーケストレーションである",
+        "correct": true
+      },
+      {
+        "text": "各時点で LLM が自律的に次の手順を決める",
+        "correct": false
+      },
+      {
+        "text": "テスト環境でしか動作しない",
+        "correct": false
+      },
+      {
+        "text": "ノード数に制限があるため 1 つしか含められない",
+        "correct": false
+      }
+    ],
+    "explanation": "Workflow 型は事前定義された順序を守る決定論的なオーケストレーションが中心です。"
+  },
+  {
+    "id": 20,
+    "section": 2,
+    "sectionTitle": "第2部: エージェントの設定と導入",
+    "question": "Workflow node の大まかなカテゴリとして、最も適切な組み合わせはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "AI / Logic / Data / Workflow Control / Communication",
+        "correct": true
+      },
+      {
+        "text": "LLM / HTTP / DB / Loop / Mail",
+        "correct": false
+      },
+      {
+        "text": "Reader / Writer / Checker / Approver / Publisher",
+        "correct": false
+      },
+      {
+        "text": "Input / Output / Compute / Storage / Network",
+        "correct": false
+      }
+    ],
+    "explanation": "Workflow は AI、Logic、Data、Control、Communication の 5 つの観点で整理されることが多いです。"
+  },
+  {
+    "id": 21,
+    "section": 3,
+    "sectionTitle": "第3部: 既製エージェントのカスタマイズ",
+    "question": "既製の Outbound Compliance Agent を特定の新規規制に対応させたい場合、最も適切なカスタマイズはどれか。",
+    "isMulti": true,
+    "options": [
+      {
+        "text": "特定の規制更新を扱う Topic を追加する",
+        "correct": true
+      },
+      {
+        "text": "システムプロンプトを更新して新規ルールを反映する",
+        "correct": true
+      },
+      {
+        "text": "資料検索を無効化して対応させる",
+        "correct": false
+      },
+      {
+        "text": "全ツールへのアクセスを削除する",
+        "correct": false
+      }
+    ],
+    "explanation": "既製テンプレートの調整では、必要な Topic とプロンプトの更新が中心であり、不要な機能削除は一般的ではありません。"
+  },
+  {
+    "id": 22,
+    "section": 3,
+    "sectionTitle": "第3部: 既製エージェントのカスタマイズ",
+    "question": "営業担当者がエージェントの応答トーンを自社スタイルに合わせたい場合、最も適切な方法はどれか。",
+    "isMulti": true,
+    "options": [
+      {
+        "text": "顧客シナリオ別の Topic を追加する",
+        "correct": true
+      },
+      {
+        "text": "System prompt にトーンと言い回しの指示を明記する",
+        "correct": true
+      },
+      {
+        "text": "生成機能を無効化する",
+        "correct": false
+      },
+      {
+        "text": "ユーザーへのアクセスを社内に限定する",
+        "correct": false
+      }
+    ],
+    "explanation": "トーン制御は、Topic と System prompt の両方を使って明確に行うのが実務上の基本です。"
+  },
+  {
+    "id": 23,
+    "section": 3,
+    "sectionTitle": "第3部: 既製エージェントのカスタマイズ",
+    "question": "事前構築テンプレートの利用で正しい説明として最も適切なものを2つ選べ。",
+    "isMulti": true,
+    "options": [
+      {
+        "text": "迅速に設定・デプロイできる",
+        "correct": true
+      },
+      {
+        "text": "既存エージェントを外部クラウドから取り込める",
+        "correct": false
+      },
+      {
+        "text": "要件に合わせて単一または複数エージェントのワークフローを設計できる",
+        "correct": true
+      },
+      {
+        "text": "完成後に自動で削除される",
+        "correct": false
+      }
+    ],
+    "explanation": "テンプレートの価値は、高速導入と業務要件に応じた設計の起点として使えることです。"
+  },
+  {
+    "id": 24,
+    "section": 3,
+    "sectionTitle": "第3部: 既製エージェントのカスタマイズ",
+    "question": "プロンプト設計で境界を明示する理由として最も適切なのはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "応答時間を短くするため",
+        "correct": false
+      },
+      {
+        "text": "責務範囲を超えた能力を hallucinate しないようにするため",
+        "correct": true
+      },
+      {
+        "text": "コストを抑えるため",
+        "correct": false
+      },
+      {
+        "text": "UI を簡潔に見せるため",
+        "correct": false
+      }
+    ],
+    "explanation": "境界がないと、担当範囲外のことを答えようとして誤った出力や幻覚が起きやすくなります。"
+  },
+  {
+    "id": 25,
+    "section": 3,
+    "sectionTitle": "第3部: 既製エージェントのカスタマイズ",
+    "question": "System prompt や Topic に絶対に入れてはいけないものはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "業務用語の定義",
+        "correct": false
+      },
+      {
+        "text": "制約条件",
+        "correct": false
+      },
+      {
+        "text": "実在する従業員名や ID などの PII",
+        "correct": true
+      },
+      {
+        "text": "何をすべきかの指示文",
+        "correct": false
+      }
+    ],
+    "explanation": "プロンプトは設定情報であり、実データを埋め込まないのが原則です。PII はランタイム時にツールで取得する方針が適切です。"
+  },
+  {
+    "id": 26,
+    "section": 3,
+    "sectionTitle": "第3部: 既製エージェントのカスタマイズ",
+    "question": "従業員向けに医療・歯科・視力保険の質問に答えるセルフサービスエージェントとして適切なのはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "Compensation Agent",
+        "correct": false
+      },
+      {
+        "text": "Benefits Agent",
+        "correct": true
+      },
+      {
+        "text": "Payslip Agent",
+        "correct": false
+      },
+      {
+        "text": "Personal and Employment Details Agent",
+        "correct": false
+      }
+    ],
+    "explanation": "福利厚生に関する内容は Benefits Agent が対象です。"
+  },
+  {
+    "id": 27,
+    "section": 3,
+    "sectionTitle": "第3部: 既製エージェントのカスタマイズ",
+    "question": "給与の進捗、追加報酬、ベンチマーク比較を扱う既製エージェントとして最も適切なのはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "Payslip Agent",
+        "correct": false
+      },
+      {
+        "text": "Compensation Agent",
+        "correct": true
+      },
+      {
+        "text": "Benefits Agent",
+        "correct": false
+      },
+      {
+        "text": "Personal Details Agent",
+        "correct": false
+      }
+    ],
+    "explanation": "Compensation Agent は給与・報酬・市場比較に関する機能を担っています。"
+  },
+  {
+    "id": 28,
+    "section": 3,
+    "sectionTitle": "第3部: 既製エージェントのカスタマイズ",
+    "question": "事前テンプレートの成果物を編集する正しい方法はどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "元の成果物に直接上書き保存する",
+        "correct": false
+      },
+      {
+        "text": "コピーを作成して編集し、元を外してコピーをチームへ追加する",
+        "correct": true
+      },
+      {
+        "text": "Oracle のサポートに依頼して書き換えてもらう",
+        "correct": false
+      },
+      {
+        "text": "プロバイダを変更して終える",
+        "correct": false
+      }
+    ],
+    "explanation": "元のテンプレートを壊さないため、コピーを編集して置換する設計が正しいです。"
+  },
+  {
+    "id": 29,
+    "section": 4,
+    "sectionTitle": "第4部: エージェントの評価とテスト",
+    "question": "評価セットを使う最も適切な用途はどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "実行時のアクセス権を決めるため",
+        "correct": false
+      },
+      {
+        "text": "LLM を自動チューニングするため",
+        "correct": false
+      },
+      {
+        "text": "質問と参照回答のセットでオフライン評価を行うため",
+        "correct": true
+      },
+      {
+        "text": "本番トラフィックを直接切り替えるため",
+        "correct": false
+      }
+    ],
+    "explanation": "評価セットは、テストケースと期待回答をもとにエージェントの品質を比較するための仕組みです。"
+  },
+  {
+    "id": 30,
+    "section": 4,
+    "sectionTitle": "第4部: エージェントの評価とテスト",
+    "question": "前の質問の文脈に依存するテストを扱う場合に適切な実行モードはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "Sequential",
+        "correct": true
+      },
+      {
+        "text": "Random",
+        "correct": false
+      },
+      {
+        "text": "Parallel",
+        "correct": false
+      },
+      {
+        "text": "Recursive",
+        "correct": false
+      }
+    ],
+    "explanation": "前の質問の文脈が後続に影響する場合、順番どおりに流す Sequential が適切です。"
+  },
+  {
+    "id": 31,
+    "section": 4,
+    "sectionTitle": "第4部: エージェントの評価とテスト",
+    "question": "評価セットへの質問と参照回答の追加方法として、適切でないものはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "CSV でアップロードする",
+        "correct": false
+      },
+      {
+        "text": "Debug Chat から追加する",
+        "correct": false
+      },
+      {
+        "text": "画面から手入力する",
+        "correct": false
+      },
+      {
+        "text": "本番モニタリングログから自動で取り込む",
+        "correct": true
+      }
+    ],
+    "explanation": "評価セットの入力は、手動入力、CSV、Debug Chat が基本で、監視ログからの自動吸い上げは一般的に想定されません。"
+  },
+  {
+    "id": 32,
+    "section": 4,
+    "sectionTitle": "第4部: エージェントの評価とテスト",
+    "question": "回答が取得したソースにどれだけ忠実かを評価する指標として最も適切なのはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "Answer Relevance",
+        "correct": false
+      },
+      {
+        "text": "Context Relevance",
+        "correct": false
+      },
+      {
+        "text": "Groundedness",
+        "correct": true
+      },
+      {
+        "text": "Error Rate",
+        "correct": false
+      }
+    ],
+    "explanation": "Groundedness は、回答が参照元の情報に基づいているかを示す指標です。"
+  },
+  {
+    "id": 33,
+    "section": 4,
+    "sectionTitle": "第4部: エージェントの評価とテスト",
+    "question": "検索・取得した情報が十分に適切で、証拠として十分に信頼できるかを測る指標はどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "Groundedness",
+        "correct": false
+      },
+      {
+        "text": "Context Relevance",
+        "correct": true
+      },
+      {
+        "text": "Answer Relevance",
+        "correct": false
+      },
+      {
+        "text": "Token Count",
+        "correct": false
+      }
+    ],
+    "explanation": "Context Relevance は、検索結果がユーザーの質問に対して十分に適切かを評価します。"
+  },
+  {
+    "id": 34,
+    "section": 4,
+    "sectionTitle": "第4部: エージェントの評価とテスト",
+    "question": "回答がユーザーの質問にどれだけ直接・十分・適切に応えているかを示す指標はどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "Groundedness",
+        "correct": false
+      },
+      {
+        "text": "Answer Relevance",
+        "correct": true
+      },
+      {
+        "text": "Context Relevance",
+        "correct": false
+      },
+      {
+        "text": "Latency",
+        "correct": false
+      }
+    ],
+    "explanation": "Answer Relevance は、答えが質問に直接的に対応しているかを示します。"
+  },
+  {
+    "id": 35,
+    "section": 4,
+    "sectionTitle": "第4部: エージェントの評価とテスト",
+    "question": "構造化されたエージェント評価の中核として必須とされるものを2つ選べ。",
+    "isMulti": true,
+    "options": [
+      {
+        "text": "評価テストデータの管理",
+        "correct": true
+      },
+      {
+        "text": "評価ランの比較",
+        "correct": true
+      },
+      {
+        "text": "アクセス資格情報の動的交換",
+        "correct": false
+      },
+      {
+        "text": "アプリケーションサーバーの過剰なオーバークロック",
+        "correct": false
+      }
+    ],
+    "explanation": "評価は、ケース管理と性能比較を軸に行うのが基本です。"
+  },
+  {
+    "id": 36,
+    "section": 4,
+    "sectionTitle": "第4部: エージェントの評価とテスト",
+    "question": "Correctness 指標に関する説明として最も適切なものはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "常に本番データをリアルタイムで評価する",
+        "correct": false
+      },
+      {
+        "text": "参照回答と比較して 0〜1 のスコアを計算する",
+        "correct": true
+      },
+      {
+        "text": "トークン数を比較する",
+        "correct": false
+      },
+      {
+        "text": "人間の監督が必須で LLM の介入が不可である",
+        "correct": false
+      }
+    ],
+    "explanation": "Correctness は、評価セットの参照回答と比較して正確さをスコア化する指標です。"
+  },
+  {
+    "id": 37,
+    "section": 5,
+    "sectionTitle": "第5部: エージェントの監視",
+    "question": "経営会議向けに、エラー率、応答時間、品質をまとめて確認したい場合、適切な指標の組み合わせを2つ選べ。",
+    "isMulti": true,
+    "options": [
+      {
+        "text": "Median Correctness",
+        "correct": true
+      },
+      {
+        "text": "Error Rate",
+        "correct": true
+      },
+      {
+        "text": "Prompt Injection",
+        "correct": false
+      },
+      {
+        "text": "Model Version Count",
+        "correct": false
+      }
+    ],
+    "explanation": "品質は Median Correctness、エラー率は Error Rate、速度は Latency としてまとめて確認します。"
+  },
+  {
+    "id": 38,
+    "section": 5,
+    "sectionTitle": "第5部: エージェントの監視",
+    "question": "品質と利用状況を一元的に確認したいときに使うべき画面はどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "Debug Chat",
+        "correct": false
+      },
+      {
+        "text": "Monitoring and Evaluation",
+        "correct": true
+      },
+      {
+        "text": "Marketplace",
+        "correct": false
+      },
+      {
+        "text": "Credentials",
+        "correct": false
+      }
+    ],
+    "explanation": "Monitroing and Evaluation タブが品質・利用状況の集約画面です。"
+  },
+  {
+    "id": 39,
+    "section": 5,
+    "sectionTitle": "第5部: エージェントの監視",
+    "question": "ダッシュボードのデータを反映させるために定期実行するプロセスとして最も適切なのはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "Aggregate AI Agent Usage and Metrics",
+        "correct": true
+      },
+      {
+        "text": "Refresh AI Agent Dashboard",
+        "correct": false
+      },
+      {
+        "text": "Compute Agent KPIs",
+        "correct": false
+      },
+      {
+        "text": "Run Evaluation Nightly",
+        "correct": false
+      }
+    ],
+    "explanation": "指定された定期プロセス名は Aggregate AI Agent Usage and Metrics で、これで監視データが更新されます。"
+  },
+  {
+    "id": 40,
+    "section": 5,
+    "sectionTitle": "第5部: エージェントの監視",
+    "question": "P99 Latency の意味として最も適切なものはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "全ユーザーの平均待ち時間",
+        "correct": false
+      },
+      {
+        "text": "99% のユーザーが体感する最大待ち時間",
+        "correct": true
+      },
+      {
+        "text": "LLM 契約上の SLA 上限値",
+        "correct": false
+      },
+      {
+        "text": "最も速い 1% に対する最小時間",
+        "correct": false
+      }
+    ],
+    "explanation": "P99 は 99% のユーザーが経験する応答時間の上限を表し、性能の揺れを見やすくします。"
+  },
+  {
+    "id": 41,
+    "section": 5,
+    "sectionTitle": "第5部: エージェントの監視",
+    "question": "Monitoring と Evaluation の両方で確認できるものではないのはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "Error Rate",
+        "correct": false
+      },
+      {
+        "text": "P99 Latency",
+        "correct": false
+      },
+      {
+        "text": "Input Token Count",
+        "correct": true
+      },
+      {
+        "text": "Session Count",
+        "correct": false
+      }
+    ],
+    "explanation": "Input Token Count は監視では確認できますが、評価では使えない測定項目として扱われます。"
+  },
+  {
+    "id": 42,
+    "section": 5,
+    "sectionTitle": "第5部: エージェントの監視",
+    "question": "Error Count が表す内容として最も適切なのはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "LLM が返したトークン数の合計",
+        "correct": false
+      },
+      {
+        "text": "記録されたエラーの総数",
+        "correct": true
+      },
+      {
+        "text": "設定されたトークン上限",
+        "correct": false
+      },
+      {
+        "text": "アクセス拒否対象ユーザー数",
+        "correct": false
+      }
+    ],
+    "explanation": "Error Count は記録されたエラーの総数を意味します。"
+  },
+  {
+    "id": 43,
+    "section": 5,
+    "sectionTitle": "第5部: エージェントの監視",
+    "question": "Session Count の定義として最も近いものはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "ワークフロー実行回数の総数",
+        "correct": false
+      },
+      {
+        "text": "ユーザーと AI エージェントの間で発生したユニークな会話セッション数",
+        "correct": true
+      },
+      {
+        "text": "ノード実行回数の合計",
+        "correct": false
+      },
+      {
+        "text": "業務オブジェクトの読み取り回数",
+        "correct": false
+      }
+    ],
+    "explanation": "Session Count はユニークな会話セッションを数える指標です。"
+  },
+  {
+    "id": 44,
+    "section": 6,
+    "sectionTitle": "第6部: セキュリティの実装",
+    "question": "データアクセスを安全に許可したいとき、最も適切な設計はどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "Fusion の外にデータを持ち出し、広く公開する",
+        "correct": false
+      },
+      {
+        "text": "Business Object を使い、Fusion のネイティブな RBAC と権限に従わせる",
+        "correct": true
+      },
+      {
+        "text": "アクセスを完全に制限して業務を止める",
+        "correct": false
+      },
+      {
+        "text": "エージェント側でユーザー権限を無視する",
+        "correct": false
+      }
+    ],
+    "explanation": "業務データへのアクセスは、Fusion のネイティブな RBAC を前提に安全に制御するのが正しい設計です。"
+  },
+  {
+    "id": 45,
+    "section": 6,
+    "sectionTitle": "第6部: セキュリティの実装",
+    "question": "各エージェントに対して、どのデータにアクセスできるかを細かく制御する仕組みとして最も適切なのはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "統合設定ファイル",
+        "correct": false
+      },
+      {
+        "text": "Fusion の Role-Based Access Control",
+        "correct": true
+      },
+      {
+        "text": "自動生成されたシステムプロンプト",
+        "correct": false
+      },
+      {
+        "text": "メッセージキューのチャンネル名",
+        "correct": false
+      }
+    ],
+    "explanation": "RBAC は業務データのアクセス権限を細かく制御する中核です。"
+  },
+  {
+    "id": 46,
+    "section": 6,
+    "sectionTitle": "第6部: セキュリティの実装",
+    "question": "AI Agent Studio で External REST API tool を作成するために、カスタムロールに必要な特権はどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "ORA_FND_ADMIN_PRIV",
+        "correct": false
+      },
+      {
+        "text": "ORA_FND_TRAP_PRIV",
+        "correct": true
+      },
+      {
+        "text": "ORA_HCM_USER_PRIV",
+        "correct": false
+      },
+      {
+        "text": "ORA_SEC_CONSOLE_PRIV",
+        "correct": false
+      }
+    ],
+    "explanation": "External REST tool 作成に必要なのは、Create and Edit Backends for Visual Builder Studio の権限です。"
+  },
+  {
+    "id": 47,
+    "section": 6,
+    "sectionTitle": "第6部: セキュリティの実装",
+    "question": "Security Console が Permission Group と連携するために、サイトレベルで有効化するプロファイル・オプションとして最も適切なのはどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "ORA_HCM_ENABLE_ALL_AGENTS",
+        "correct": false
+      },
+      {
+        "text": "ORA_FUSION_ENABLE_AGENT_STUDIO",
+        "correct": false
+      },
+      {
+        "text": "ORA_ASE_SAS_INTEGRATION_ENABLED",
+        "correct": true
+      },
+      {
+        "text": "ORA_AI_AGENT_PERMISSION_MODE",
+        "correct": false
+      }
+    ],
+    "explanation": "Enable Security Console External Application Integration の有効化が必要です。"
+  },
+  {
+    "id": 48,
+    "section": 6,
+    "sectionTitle": "第6部: セキュリティの実装",
+    "question": "統合 AI ヘルプエージェントを使うために実行するべき定期プロセスとして最も適切な組み合わせはどれか。",
+    "isMulti": true,
+    "options": [
+      {
+        "text": "Index AI Agent Studio Assistant Documents",
+        "correct": true
+      },
+      {
+        "text": "Index AI Agent Studio Assistant Objects and Attributes",
+        "correct": true
+      },
+      {
+        "text": "Rebuild Prompt Cache",
+        "correct": false
+      },
+      {
+        "text": "Compile Agent Team",
+        "correct": false
+      }
+    ],
+    "explanation": "ヘルプエージェントを使うためには、Assistant Documents と Objects/Attributes のインデックス作成が前提です。"
+  },
+  {
+    "id": 49,
+    "section": 6,
+    "sectionTitle": "第6部: セキュリティの実装",
+    "question": "公開済みの AI エージェントをエンドユーザーが見つけて使えるようにするために必要な条件として最も適切なものを2つ選べ。",
+    "isMulti": true,
+    "options": [
+      {
+        "text": "エージェントに割り当てられたセキュリティがユーザーのアクセス条件と一致している",
+        "correct": true
+      },
+      {
+        "text": "管理者がエージェントを公開している",
+        "correct": true
+      },
+      {
+        "text": "ユーザーが LLM プロバイダに直接サインインしている",
+        "correct": false
+      },
+      {
+        "text": "ユーザーが Agent Studio 管理者ロールを持っている",
+        "correct": false
+      }
+    ],
+    "explanation": "表示条件は、公開済みであることとユーザーの権限が一致していることの 2 点です。"
+  },
+  {
+    "id": 50,
+    "section": 6,
+    "sectionTitle": "第6部: セキュリティの実装",
+    "question": "AI Agent Studio におけるセキュリティ防御として、最も正しい考え方はどれか。",
+    "isMulti": false,
+    "options": [
+      {
+        "text": "UI の見た目とプロンプトの長さが安全性を決める",
+        "correct": false
+      },
+      {
+        "text": "Fusion の RBAC、Human-in-the-loop、ツール別アクセス制御を組み合わせて設計する",
+        "correct": true
+      },
+      {
+        "text": "アウトバウンド通信を無条件に許可しておく",
+        "correct": false
+      },
+      {
+        "text": "データは外部に保存して安全を確保する",
+        "correct": false
+      }
+    ],
+    "explanation": "安全な設計は、Fusion のネイティブ権限と承認制御を合わせて使うことで、エージェントの操作範囲を明確にすることです。"
+  }
+];
 
     // アプリケーション状態
     let currentFilteredList = [...quizData];
@@ -842,6 +1533,58 @@
     let wrongQuestionIds = new Set();
     let currentMode = "all"; // "all" | "review"
     let currentSection = "all";
+
+    // Supabase persistence. Anonymous auth keeps the app usable without collecting email addresses.
+    const SUPABASE_URL = "https://kypxecpqycpgeidbwlpk.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_Qe2mnM14yXCvcseV4Oj-Tw_1pPct12V";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    let supabaseUser = null;
+
+    function setSyncStatus(message, isError = false) {
+      const status = document.getElementById("sync-status");
+      status.textContent = message;
+      status.className = `hidden md:inline text-[11px] ${isError ? "text-amber-200" : "text-slate-300"}`;
+    }
+
+    async function initializeCloudProgress() {
+      try {
+        const { data: authData, error: authError } = await supabaseClient.auth.signInAnonymously();
+        if (authError) throw authError;
+        supabaseUser = authData.user;
+
+        const { data, error } = await supabaseClient
+          .from("quiz_progress")
+          .select("question_id, selected_indexes, is_wrong")
+          .eq("user_id", supabaseUser.id);
+        if (error) throw error;
+
+        data.forEach((row) => {
+          userAnswers[row.question_id] = row.selected_indexes;
+          if (row.is_wrong) wrongQuestionIds.add(row.question_id);
+        });
+        setSyncStatus("クラウド保存中");
+        renderNavGrid();
+        renderCurrentQuestion();
+      } catch (error) {
+        console.error("Supabase progress initialization failed:", error);
+        setSyncStatus("ローカル保存のみ", true);
+      }
+    }
+
+    async function saveProgress(q, isUserCorrect) {
+      if (!supabaseUser) return;
+      const { error } = await supabaseClient.from("quiz_progress").upsert({
+        user_id: supabaseUser.id,
+        question_id: q.id,
+        selected_indexes: userAnswers[q.id],
+        is_wrong: !isUserCorrect,
+        updated_at: new Date().toISOString()
+      }, { onConflict: "user_id,question_id" });
+      if (error) {
+        console.error("Supabase progress save failed:", error);
+        setSyncStatus("保存エラー", true);
+      }
+    }
 
     // 音声読み上げ管理 (Web Speech API)
     let synth = window.speechSynthesis;
@@ -1128,6 +1871,7 @@
       } else {
         wrongQuestionIds.add(q.id);
       }
+      saveProgress(q, isUserCorrect);
 
       renderNavGrid();
       renderCurrentQuestion();
@@ -1270,6 +2014,7 @@
     window.addEventListener('DOMContentLoaded', () => {
       applyFilters();
       startTimer();
+      initializeCloudProgress();
     });
   </script>
 </body>

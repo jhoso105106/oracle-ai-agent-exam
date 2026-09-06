@@ -6,6 +6,7 @@
   <title>Oracle Fusion AI Agent Studio (1Z0-1145-1-JPN) 模擬試験 4択問題集＆復習システム</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     .glass {
       background: rgba(255, 255, 255, 0.92);
@@ -47,6 +48,7 @@
           <i class="fa-regular fa-clock text-rose-300"></i>
           <span id="timer-display" class="font-mono text-sm font-semibold">60:00</span>
         </div>
+        <span id="sync-status" class="hidden md:inline text-[11px] text-slate-300">保存準備中</span>
       </div>
     </div>
   </header>
@@ -1532,6 +1534,58 @@
     let currentMode = "all"; // "all" | "review"
     let currentSection = "all";
 
+    // Supabase persistence. Anonymous auth keeps the app usable without collecting email addresses.
+    const SUPABASE_URL = "https://kypxecpqycpgeidbwlpk.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_Qe2mnM14yXCvcseV4Oj-Tw_1pPct12V";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    let supabaseUser = null;
+
+    function setSyncStatus(message, isError = false) {
+      const status = document.getElementById("sync-status");
+      status.textContent = message;
+      status.className = `hidden md:inline text-[11px] ${isError ? "text-amber-200" : "text-slate-300"}`;
+    }
+
+    async function initializeCloudProgress() {
+      try {
+        const { data: authData, error: authError } = await supabaseClient.auth.signInAnonymously();
+        if (authError) throw authError;
+        supabaseUser = authData.user;
+
+        const { data, error } = await supabaseClient
+          .from("quiz_progress")
+          .select("question_id, selected_indexes, is_wrong")
+          .eq("user_id", supabaseUser.id);
+        if (error) throw error;
+
+        data.forEach((row) => {
+          userAnswers[row.question_id] = row.selected_indexes;
+          if (row.is_wrong) wrongQuestionIds.add(row.question_id);
+        });
+        setSyncStatus("クラウド保存中");
+        renderNavGrid();
+        renderCurrentQuestion();
+      } catch (error) {
+        console.error("Supabase progress initialization failed:", error);
+        setSyncStatus("ローカル保存のみ", true);
+      }
+    }
+
+    async function saveProgress(q, isUserCorrect) {
+      if (!supabaseUser) return;
+      const { error } = await supabaseClient.from("quiz_progress").upsert({
+        user_id: supabaseUser.id,
+        question_id: q.id,
+        selected_indexes: userAnswers[q.id],
+        is_wrong: !isUserCorrect,
+        updated_at: new Date().toISOString()
+      }, { onConflict: "user_id,question_id" });
+      if (error) {
+        console.error("Supabase progress save failed:", error);
+        setSyncStatus("保存エラー", true);
+      }
+    }
+
     // 音声読み上げ管理 (Web Speech API)
     let synth = window.speechSynthesis;
     let isTtsEnabled = true;
@@ -1817,6 +1871,7 @@
       } else {
         wrongQuestionIds.add(q.id);
       }
+      saveProgress(q, isUserCorrect);
 
       renderNavGrid();
       renderCurrentQuestion();
@@ -1959,6 +2014,7 @@
     window.addEventListener('DOMContentLoaded', () => {
       applyFilters();
       startTimer();
+      initializeCloudProgress();
     });
   </script>
 </body>
