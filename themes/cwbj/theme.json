@@ -1,0 +1,9 @@
+{
+  "$schema": "../../.github/extensions/markdstage/schema/theme-metadata-v1.schema.json",
+  "version": 1,
+  "cover": {
+    "background": {
+      "image": "assets/cover-cwbj.png"
+    }
+  }
+}

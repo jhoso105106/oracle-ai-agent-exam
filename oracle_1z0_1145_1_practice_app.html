@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oracle Fusion AI Agent Studio (1Z0-1145-1-JPN) 模擬試験 4択問題集＆復習システム</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .glass {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: #cbd5e1;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
+
+  <!-- ヘッダー -->
+  <header class="bg-gradient-to-r from-red-800 via-rose-900 to-slate-900 text-white shadow-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="bg-red-500/30 text-red-200 text-xs px-2 py-0.5 rounded border border-red-400/40 font-semibold tracking-wide">1Z0-1145-1-JPN</span>
+          <span class="text-xs text-slate-300">Rel 1 対策</span>
+        </div>
+        <h1 class="text-lg md:text-xl font-bold tracking-tight mt-0.5">Fusion AI Agent Studio Foundations Associate 模擬試験</h1>
+      </div>
+
+      <!-- 音声読み上げ & アクションコントロール -->
+      <div class="flex items-center gap-2">
+        <button id="tts-toggle-btn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs md:text-sm transition font-medium border border-white/20">
+          <i id="tts-icon" class="fa-solid fa-volume-high text-emerald-400"></i>
+          <span id="tts-label">音声: 有効</span>
+        </button>
+        <button id="tts-stop-btn" title="読み上げ停止" class="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs md:text-sm transition border border-white/20">
+          <i class="fa-solid fa-stop text-amber-300"></i>
+        </button>
+        <div class="hidden sm:flex items-center gap-1.5 bg-black/25 px-3 py-1.5 rounded-lg border border-white/10 text-xs">
+          <i class="fa-regular fa-clock text-rose-300"></i>
+          <span id="timer-display" class="font-mono text-sm font-semibold">60:00</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- メインレイアウト -->
+  <div class="max-w-6xl mx-auto px-4 py-6 flex-1 w-full flex flex-col md:flex-row gap-6">
+
+    <!-- サイドバー: コントロール＆進捗 -->
+    <aside class="w-full md:w-80 flex flex-col gap-4 order-2 md:order-1">
+      
+      <!-- モード切替パネル -->
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">学習モード切替</h2>
+        <div class="grid grid-cols-2 gap-2">
+          <button id="mode-all" class="px-3 py-2 text-xs font-semibold rounded-lg bg-red-800 text-white shadow-sm flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-list-check"></i> 全50問
+          </button>
+          <button id="mode-review" class="px-3 py-2 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-repeat text-amber-600"></i> 要復習 (<span id="wrong-count-badge">0</span>)
+          </button>
+        </div>
+
+        <!-- セクションフィルター -->
+        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mt-4 mb-1.5">セクション絞り込み</label>
+        <select id="section-filter" class="w-full text-xs bg-slate-50 border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-red-700 outline-none">
+          <option value="all">全セクション (Q1 - Q50)</option>
+          <option value="1">第1部: コア機能の理解 (Q1-Q10)</option>
+          <option value="2">第2部: エージェントの設定と導入 (Q11-Q20)</option>
+          <option value="3">第3部: 既製エージェントのカスタマイズ (Q21-Q28)</option>
+          <option value="4">第4部: エージェントの評価とテスト (Q29-Q36)</option>
+          <option value="5">第5部: エージェントの監視 (Q37-Q43)</option>
+          <option value="6">第6部: セキュリティの実装 (Q44-Q50)</option>
+        </select>
+      </div>
+
+      <!-- スコア＆進行状況 -->
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-xs font-bold text-slate-400 uppercase">進行度</span>
+          <span id="progress-text" class="text-xs font-bold text-slate-600">0 / 50 解答済み</span>
+        </div>
+        <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden mb-3">
+          <div id="progress-bar" class="bg-red-700 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2 text-center pt-2 border-t border-slate-100">
+          <div class="p-2 bg-slate-50 rounded-lg">
+            <span class="block text-[10px] text-slate-400 font-bold">正解</span>
+            <span id="stat-correct" class="text-base font-bold text-emerald-600">0</span>
+          </div>
+          <div class="p-2 bg-slate-50 rounded-lg">
+            <span class="block text-[10px] text-slate-400 font-bold">不正解</span>
+            <span id="stat-wrong" class="text-base font-bold text-rose-600">0</span>
+          </div>
+          <div class="p-2 bg-slate-50 rounded-lg">
+            <span class="block text-[10px] text-slate-400 font-bold">正答率</span>
+            <span id="stat-accuracy" class="text-base font-bold text-slate-800">0%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 問題一覧ジャンプグリッド -->
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex-1">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-bold text-slate-400 uppercase">問題一覧ジャンプ</span>
+          <span class="text-[11px] text-slate-400">クリックで移動</span>
+        </div>
+        <div id="nav-grid" class="grid grid-cols-5 gap-1.5 max-h-56 overflow-y-auto custom-scrollbar p-1">
+          <!-- 動的挿入 -->
+        </div>
+      </div>
+
+      <!-- 読み上げ詳細設定 -->
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 text-xs">
+        <span class="font-bold text-slate-500 uppercase tracking-wider block mb-2"><i class="fa-solid fa-sliders mr-1"></i> 読み上げ速度設定</span>
+        <div class="flex items-center justify-between gap-3">
+          <span class="text-slate-500">速度: <span id="rate-val" class="font-semibold text-slate-800">1.0x</span></span>
+          <input id="tts-rate" type="range" min="0.7" max="1.6" step="0.1" value="1.0" class="w-28 accent-red-700">
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- メインコンテンツ: クイズカード表示エリア -->
+    <main class="flex-1 flex flex-col order-1 md:order-2">
+      
+      <div id="quiz-card" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 flex flex-col relative transition-all duration-200">
+        
+        <!-- セクションバッジ & ナビヘッダー -->
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-4 border-b border-slate-100">
+          <div class="flex items-center gap-2">
+            <span id="section-badge" class="px-2.5 py-1 text-xs font-bold rounded-md bg-rose-50 text-rose-800 border border-rose-200">
+              第1部: コア機能の理解
+            </span>
+            <span id="type-badge" class="px-2 py-0.5 text-[11px] font-semibold rounded bg-slate-100 text-slate-600">
+              単一選択
+            </span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <!-- 音声読み上げボタン (個別発火) -->
+            <button id="speak-question-btn" title="問題文と選択肢を読み上げる" class="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm transition flex items-center gap-1">
+              <i class="fa-solid fa-volume-low text-red-700"></i>
+              <span class="text-xs font-medium hidden sm:inline">読み上げ</span>
+            </button>
+            <span id="q-counter" class="text-sm font-bold text-slate-400 font-mono">Q1 / 50</span>
+          </div>
+        </div>
+
+        <!-- 質問文 -->
+        <div class="mb-6">
+          <h3 id="question-text" class="text-base md:text-lg font-bold text-slate-800 leading-relaxed">
+            読み込み中...
+          </h3>
+        </div>
+
+        <!-- 選択肢リスト -->
+        <div id="options-container" class="flex flex-col gap-3 mb-6">
+          <!-- 動的挿入 -->
+        </div>
+
+        <!-- 複数選択用 確定ボタン -->
+        <div id="multi-submit-wrapper" class="hidden mb-6">
+          <button id="multi-submit-btn" class="w-full py-3 bg-red-700 hover:bg-red-800 text-white rounded-xl font-bold shadow-md transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-check"></i> この回答で決定する
+          </button>
+        </div>
+
+        <!-- 解説アコーディオン・エリア (回答後にオープン) -->
+        <div id="explanation-box" class="hidden rounded-xl border border-slate-200 bg-slate-50 p-5 mt-2 transition-all">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span id="result-status-pill" class="text-xs font-bold px-2.5 py-1 rounded">正解</span>
+              <h4 class="font-bold text-slate-800 text-sm md:text-base">公式解説・キーポイント</h4>
+            </div>
+            <button id="speak-explanation-btn" class="text-xs bg-white border border-slate-300 hover:bg-slate-100 px-2.5 py-1 rounded-md text-slate-700 flex items-center gap-1">
+              <i class="fa-solid fa-volume-low text-red-700"></i> 解説を読み上げ
+            </button>
+          </div>
+          <div id="explanation-text" class="text-xs md:text-sm text-slate-700 leading-relaxed space-y-2 whitespace-pre-line">
+          </div>
+        </div>
+
+        <!-- 前へ / 次へ ボタン -->
+        <div class="flex items-center justify-between pt-6 mt-6 border-t border-slate-100">
+          <button id="prev-btn" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 text-xs md:text-sm font-semibold flex items-center gap-2 transition disabled:opacity-30 disabled:pointer-events-none">
+            <i class="fa-solid fa-arrow-left"></i> 前の問題
+          </button>
+
+          <button id="next-btn" class="px-5 py-2 rounded-lg bg-slate-900 hover:bg-black text-white text-xs md:text-sm font-semibold flex items-center gap-2 transition shadow-sm">
+            次の問題 <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- 下部ヒント・要点メモカード -->
+      <div class="mt-4 bg-amber-50/70 border border-amber-200 rounded-xl p-4 text-xs text-amber-900 flex items-start gap-3">
+        <i class="fa-solid fa-lightbulb text-amber-600 mt-0.5 text-base"></i>
+        <div>
+          <span class="font-bold">試験対策ヒント (3回目で必ず受かるための鉄則):</span>
+          <p class="mt-0.5 text-amber-800 leading-relaxed">
+            迷ったときは「<strong>Fusionネイティブのセキュリティ (RBAC)</strong>」「<strong>Human-in-the-Loop (事前承認)</strong>」「<strong>Business Object による安全な直接連携</strong>」を選ぶのがOracle公式の正答パターンです。
+          </p>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- クイズデータおよびアプリケーションスクリプト -->
+  <script>
+    // 50問の完全データ（PDF模試準拠）
+    const quizData = [
+      // 第1部: コア機能の理解 (Q1-Q10)
+      {
+        id: 1, section: 1, sectionTitle: "第1部: コア機能の理解",
+        question: "Oracle AI Agent Studioにおいて、「実際にデプロイ可能な単位」となるコンポーネントはどれか。",
+        isMulti: false,
+        options: [
+          { text: "Topic (トピック)", correct: false },
+          { text: "Instructions (インストラクション)", correct: false },
+          { text: "Workflow (ワークフロー/エージェントチーム)", correct: true },
+          { text: "Tool (ツール)", correct: false }
+        ],
+        explanation: "公式ドキュメントでは「The workflow is the component that can be deployed for use.」と明記されており、単一のエージェントも複数のエージェントも、必ずワークフロー（エージェントチーム）に追加してからデプロイされます。"
+      },
+      {
+        id: 2, section: 1, sectionTitle: "第1部: コア機能の理解",
+        question: "会話の代理として業務ユーザーの入力を受け取り、他のエージェント(群)に橋渡しするエージェントタイプはどれか。",
+        isMulti: false,
+        options: [
+          { text: "Supervisor agent", correct: false },
+          { text: "Specialist agent", correct: false },
+          { text: "User-proxy agent (会話型エージェント)", correct: true },
+          { text: "Utility agent", correct: false }
+        ],
+        explanation: "User-proxy agentは「Acts on behalf of a business user to provide input to another agent or group of agents. It's sometimes referred to as a conversational agent.」と定義されています。"
+      },
+      {
+        id: 3, section: 1, sectionTitle: "第1部: コア機能の理解",
+        question: "複数のエージェントを統括し、エージェントフロー内でどのエージェントを呼ぶかを判断する役割を持つエージェントタイプはどれか。",
+        isMulti: false,
+        options: [
+          { text: "User-proxy agent", correct: false },
+          { text: "Supervisor agent (スーパーバイザーエージェント)", correct: true },
+          { text: "Persona-based agent", correct: false },
+          { text: "Task-oriented agent", correct: false }
+        ],
+        explanation: "Supervisor agentは「Orchestrates the use of agents within an agentic flow.」と定義されており、他エージェントへのルーティングやオーケストレーションを担います。"
+      },
+      {
+        id: 4, section: 1, sectionTitle: "第1部: コア機能の理解",
+        question: "Oracle AI Agent Studioにおける Topics (トピック) の役割として最も正しいものはどれか。",
+        isMulti: false,
+        options: [
+          { text: "エージェントが利用可能なLLMモデルを指定する", correct: false },
+          { text: "エージェントの会話・能力の境界 (boundaries & constraints) を自然言語のインストラクションで定義する", correct: true },
+          { text: "エージェントが利用できる業務オブジェクトを直接制御する", correct: false },
+          { text: "エージェントのUIレイアウトをカスタマイズする", correct: false }
+        ],
+        explanation: "Topicsは「Defines the areas of expertise through instructions that set the boundaries and constraints for agent conversations and abilities.」と定義され、BenefitsエージェントにHSA・退職給付・株式プランなどの専門領域の境界を設定します。"
+      },
+      {
+        id: 5, section: 1, sectionTitle: "第1部: コア機能の理解",
+        question: "Instructions (インストラクション) に関する説明として最も正しいものはどれか。",
+        isMulti: false,
+        options: [
+          { text: "UIボタンのラベル定義に使う", correct: false },
+          { text: "トピックに対する自然言語のルール・条件を定義し、LLMに送られるプロンプトの一部となる", correct: true },
+          { text: "業務オブジェクトのフィールド一覧を定義する", correct: false },
+          { text: "外部REST APIの認証情報を格納する", correct: false }
+        ],
+        explanation: "Instructionsは「natural language rules that define the rules or conditions applied to a given topic. Instructions are part of the prompts that are sent to the underlying large language model.」と説明されています。"
+      },
+      {
+        id: 6, section: 1, sectionTitle: "第1部: コア機能の理解",
+        question: "以下のうち、AI Agent StudioのToolsとして提供されているものをすべて選べ。",
+        isMulti: false,
+        options: [
+          { text: "Business Object", correct: false },
+          { text: "Document Retrieval (RAG)", correct: false },
+          { text: "Email / Deep Link / External REST", correct: false },
+          { text: "上記すべて (Business Object, Document, Email, Deep Link, External REST等)", correct: true }
+        ],
+        explanation: "公式ドキュメントで挙げられているツールはCalculator, Connector, Email, Business Object, User Query, Document Retrieval (RAG), Deep Link, External REST, MCPなどです。"
+      },
+      {
+        id: 7, section: 1, sectionTitle: "第1部: コア機能の理解",
+        question: "Business Objectツールがエージェントに提供する機能はどれか。",
+        isMulti: false,
+        options: [
+          { text: "天気情報など外部SaaS APIとの接続", correct: false },
+          { text: "Fusion Applications内の業務オブジェクトレコードの取得・更新・作成・削除", correct: true },
+          { text: "カスタム文書のアップロードと自然言語検索", correct: false },
+          { text: "ユーザーをFusionの特定画面へ誘導するリンク生成", correct: false }
+        ],
+        explanation: "Business Object toolは「allow AI agents to retrieve, update, create, or delete business object records within Fusion Applications」と定義されています。"
+      },
+      {
+        id: 8, section: 1, sectionTitle: "第1部: コア機能の理解",
+        question: "ユーザーをFusion Applicationsの特定ページ (例: 住所変更ページ) に直接誘導するツールはどれか。",
+        isMulti: false,
+        options: [
+          { text: "Business Object tool", correct: false },
+          { text: "Connector", correct: false },
+          { text: "Deep Link tool", correct: true },
+          { text: "Email tool", correct: false }
+        ],
+        explanation: "Deep Link toolは「will send a user directly to the part of Fusion Applications where they can update underlying information.」と説明されています。"
+      },
+      {
+        id: 9, section: 1, sectionTitle: "第1部: コア機能の理解",
+        question: "User-proxy / Supervisor / Specialist の3分類とは別に、エージェントが持つ「特徴 (Characteristic)」として公式が挙げているものはどれか。",
+        isMulti: false,
+        options: [
+          { text: "Read-only agent (読取専用エージェント)", correct: false },
+          { text: "Persona-based agent (ペルソナベースエージェント)", correct: true },
+          { text: "Encrypted agent (暗号化エージェント)", correct: false },
+          { text: "Streaming agent (ストリーミングエージェント)", correct: false }
+        ],
+        explanation: "Persona-based agentは「Represents a specific role, such as benefits administrator, customer service representative, and finance administrator.」と説明されています。他にはTool user, Task-oriented agentが挙げられています。"
+      },
+      {
+        id: 10, section: 1, sectionTitle: "第1部: コア機能の理解",
+        question: "Oracle提供の事前構築済み (Preconfigured) エージェントテンプレートを利用するとき、テンプレート内の成果物 (エージェント・ツール・トピック) を直接編集できるか。",
+        isMulti: false,
+        options: [
+          { text: "すべて直接編集できる", correct: false },
+          { text: "直接は編集できない。編集するにはコピーを作成してチームに追加する必要がある", correct: true },
+          { text: "管理者権限があれば直接編集できる", correct: false },
+          { text: "一部のフィールドのみ直接編集できる", correct: false }
+        ],
+        explanation: "「When using a preconfigured agent team template, the artifacts such as agents, tools, and topics, aren't directly editable. To change these artifacts, you create a copy of the artifact and add the copy to the agent team.」と明記されています。"
+      },
+
+      // 第2部: エージェントの設定と導入 (Q11-Q20)
+      {
+        id: 11, section: 2, sectionTitle: "第2部: エージェントの設定と導入",
+        question: "エンドユーザーが公開されたAIエージェントをFusion Cloud内で探し、会話を開始できる「自己サービスハブ」の名称はどれか。",
+        isMulti: false,
+        options: [
+          { text: "Agent Marketplace", correct: false },
+          { text: "Agent Explorer", correct: true },
+          { text: "Agent Console", correct: false },
+          { text: "Agent Portal", correct: false }
+        ],
+        explanation: "Agent Explorerは「a self-service hub where end users can discover, search, and start conversations with any AI Agent that has been published and made available to them」と説明されています。(ナビゲーション: Me > Show More > AI Agent Studio)"
+      },
+      {
+        id: 12, section: 2, sectionTitle: "第2部: エージェントの設定と導入",
+        question: "Guided Journey (ガイドジャーニー) でAIエージェントを埋め込む場合、どの粒度で紐付けが可能か。",
+        isMulti: false,
+        options: [
+          { text: "ユーザーごとにのみ紐付け可能", correct: false },
+          { text: "ページレベルまたはセクションレベルで紐付け可能", correct: true },
+          { text: "Roleレベルにのみ紐付け可能", correct: false },
+          { text: "Family (HCM/ERP) レベルにのみ紐付け可能", correct: false }
+        ],
+        explanation: "Guided Journeyは「A Guided Journey can be attached to almost every Redwood page, either at page level or at a specific section level.」と説明されています。"
+      },
+      {
+        id: 13, section: 2, sectionTitle: "第2部: エージェントの設定と導入",
+        question: "Smart Actions / Visual Builder Studio によるエージェント埋込の特徴として正しいものはどれか。",
+        isMulti: false,
+        options: [
+          { text: "すべてのFusionモジュールで無条件に利用可能", correct: false },
+          { text: "コンテキスト対応 (context-sensitive) で、ページ上のデータを自動的に取り込む", correct: true },
+          { text: "モバイルアプリのみで動作する", correct: false },
+          { text: "事前構築済みエージェントには使えない", correct: false }
+        ],
+        explanation: "VB Studio / Smart Actionsによる埋込は「uniquely context-sensitive - they automatically detect and pull the data present on the page when a user queries them.」という強力な特徴を持ちます。"
+      },
+      {
+        id: 14, section: 2, sectionTitle: "第2部: エージェントの設定と導入",
+        question: "従業員データを更新するAIエージェントで、機微な変更を安全に管理するためにAI Agent Studio内で最も適切な仕組みはどれか。",
+        isMulti: false,
+        options: [
+          { text: "業務時間内だけ更新できるように時間制限をかける", correct: false },
+          { text: "重要データ変更の前に承認を求めるHuman-in-the-loop (レビュー) ステップを追加する", correct: true },
+          { text: "更新後に関係者へアラートメールを送信する", correct: false },
+          { text: "更新結果を毎日CSVに自動エクスポートする", correct: false }
+        ],
+        explanation: "AI Agent Studioでは「add an approval step for some actions that your AI agent will perform. The review step can be added at any point in the process for oversight and control over key actions, such as sending an email or updating a record.」と定義されており、事後通知ではなく事前承認ノードを挟むのが正解です。"
+      },
+      {
+        id: 15, section: 2, sectionTitle: "第2部: エージェントの設定と導入",
+        question: "サードパーティシステムとカスタム業務オブジェクトの両方にアクセスする必要があるエージェントを構築する最適な方法はどれか。",
+        isMulti: false,
+        options: [
+          { text: "事前構築テンプレートをコピーしてカスタマイズする", correct: false },
+          { text: "Emailツールだけを使う", correct: false },
+          { text: "外部生成AIサービスを呼び出しFusionエージェントは使わない", correct: false },
+          { text: "エージェントワークフローをゼロから作成し、必要なツールを組み合わせる", correct: true }
+        ],
+        explanation: "事前構築テンプレートでカバーできないカスタム要件（独自オブジェクト＋外部REST API）では、ワークフローをゼロから設計し、External RESTとBusiness Objectツールを組み合わせるのが公式推奨です。"
+      },
+      {
+        id: 16, section: 2, sectionTitle: "第2部: エージェントの設定と導入",
+        question: "内部・外部SaaS アプリケーションや公開APIに接続するために追加できるツールはどれか。",
+        isMulti: false,
+        options: [
+          { text: "Business Object tool", correct: false },
+          { text: "Deep Link tool", correct: false },
+          { text: "External REST tool", correct: true },
+          { text: "Document tool", correct: false }
+        ],
+        explanation: "External RESTツールは「You can connect to internal and external SaaS applications or public APIs using External REST tool.」と説明されています。"
+      },
+      {
+        id: 17, section: 2, sectionTitle: "第2部: エージェントの設定と導入",
+        question: "外部のMCPサーバーへ、REST wrapperやプラグインを追加開発せずに安全に接続できるツールはどれか。",
+        isMulti: false,
+        options: [
+          { text: "Connector", correct: false },
+          { text: "External REST", correct: false },
+          { text: "MCP tool (Model Context Protocol tool)", correct: true },
+          { text: "Deep Link", correct: false }
+        ],
+        explanation: "MCP toolは「You can use the Model Context Protocol (MCP) tool and securely connect to external MCP servers, without building additional REST wrappers or plugin logic.」と説明されています。"
+      },
+      {
+        id: 18, section: 2, sectionTitle: "第2部: エージェントの設定と導入",
+        question: "AI Agent Studioで作成できるConnectorの種類として、Oracleがドキュメントで挙げている組み合わせを選べ。(該当3種)",
+        isMulti: true,
+        options: [
+          { text: "SharePoint Connector", correct: true },
+          { text: "Web Crawler Connector", correct: true },
+          { text: "Custom Content Source Connector", correct: true },
+          { text: "SQL Direct Connector", correct: false }
+        ],
+        explanation: "ドキュメント「Create a Connector for AI Agents」には SharePoint / Web Crawler / Custom Content Source の3つが明記されています。SQL Directというコネクターは存在しません。"
+      },
+      {
+        id: 19, section: 2, sectionTitle: "第2部: エージェントの設定と導入",
+        question: "ワークフローエージェント (Workflow Agent Team) に関する説明として正しいものはどれか。",
+        isMulti: false,
+        options: [
+          { text: "LLMがすべての実行順序を毎回自律的に決定する", correct: false },
+          { text: "あらかじめ決められた順序でノードを実行する、決定論的 (deterministic) なオーケストレーション", correct: true },
+          { text: "デプロイはできず、テスト環境でのみ動作する", correct: false },
+          { text: "エージェントを1つしか含めることができない", correct: false }
+        ],
+        explanation: "Workflow型エージェントチームは「a sequence of nodes used for deterministic, rule-based orchestration of tasks in which every step is preconfigured.」と定義されています。"
+      },
+      {
+        id: 20, section: 2, sectionTitle: "第2部: エージェントの設定と導入",
+        question: "Workflowエージェントで使えるノード種別を大まかに分類したとき、Oracleブログが挙げている5カテゴリはどれか。",
+        isMulti: false,
+        options: [
+          { text: "AI / Logic / Data / Workflow Control / Communication", correct: true },
+          { text: "LLM / HTTP / DB / Loop / Email", correct: false },
+          { text: "Reader / Writer / Checker / Approver / Publisher", correct: false },
+          { text: "Input / Output / Compute / Storage / Network", correct: false }
+        ],
+        explanation: "公式ブログで、AI Nodes (Brain), Logic Nodes (Spine), Data Nodes (Connectors), Workflow Control Nodes (Choreographer), Communication Nodes (Messenger) の5カテゴリとして整理されています。"
+      },
+
+      // 第3部: 既製エージェントのカスタマイズ (Q21-Q28)
+      {
+        id: 21, section: 3, sectionTitle: "第3部: 既製エージェントのカスタマイズ",
+        question: "サプライチェーン担当者が Outbound Compliance Agent テンプレートを使用しつつ、新しい危険物規制に対応させたい。適切なカスタマイズ方法を2つ選べ。",
+        isMulti: true,
+        options: [
+          { text: "業務オブジェクトツールへのアクセスを削除する", correct: false },
+          { text: "特定の規制更新に対応するTopicを追加する", correct: true },
+          { text: "システムプロンプトを更新し、新しい規制要件の情報を反映する", correct: true },
+          { text: "セマンティック検索を手動ドキュメント検索に置き換える", correct: false }
+        ],
+        explanation: "既製エージェントのカスタマイズは「Topicの追加」と「システムプロンプトの調整」が王道です。ツールを削除したりセマンティック検索を外すのは誤りです。"
+      },
+      {
+        id: 22, section: 3, sectionTitle: "第3部: 既製エージェントのカスタマイズ",
+        question: "セールスリーダーがエージェントに「自社のトーンに合わせた顧客コミュニケーション」を生成させたい。適切なカスタマイズを2つ選べ。",
+        isMulti: true,
+        options: [
+          { text: "さまざまな顧客対応シナリオを表すTopicを追加する", correct: true },
+          { text: "LLMベースのコンテンツ生成を無効化する", correct: false },
+          { text: "エージェントを社内通知のみに制限する", correct: false },
+          { text: "システムプロンプトにトーン・言語の好みを明記する", correct: true }
+        ],
+        explanation: "トーンやスタイルの制御はプロンプトエンジニアリングの基本であり、「System Promptへの記述」と「シナリオ別Topicの追加」で対応します。"
+      },
+      {
+        id: 23, section: 3, sectionTitle: "第3部: 既製エージェントのカスタマイズ",
+        question: "事前構築済みテンプレートを使う際にサポートされている2つのアクションはどれか。",
+        isMulti: true,
+        options: [
+          { text: "Oracle提供テンプレートのカタログを使って迅速に設定・デプロイする", correct: true },
+          { text: "外部クラウドから既存エージェントをインポートしてテンプレート化する", correct: false },
+          { text: "単一エージェントのワークフローを業務要件に合わせて設計する", correct: true },
+          { text: "一定期間経過後に非アクティブなテンプレートを自動削除する", correct: false }
+        ],
+        explanation: "事前テンプレートは迅速なデプロイ(rapid configuration & deployment)と、業務に合わせたワークフロー設計(単一・複数エージェント)に用いられます。"
+      },
+      {
+        id: 24, section: 3, sectionTitle: "第3部: 既製エージェントのカスタマイズ",
+        question: "プロンプト設計における「境界 (boundaries) を明示する」ことが重要とされる理由として最も適切なものはどれか。",
+        isMulti: false,
+        options: [
+          { text: "応答時間を短縮できるから", correct: false },
+          { text: "境界がないとエージェントが持たない能力を「幻覚 (hallucinate)」してしまうから", correct: true },
+          { text: "LLMプロバイダーの請求額を抑えられるから", correct: false },
+          { text: "UI表示が最適化されるから", correct: false }
+        ],
+        explanation: "「Without boundaries, agents overstep their scope, hallucinate capabilities they don't have, or fail silently」と明記されており、ハルシネーションやスコープ逸脱の防止が主目的です。"
+      },
+      {
+        id: 25, section: 3, sectionTitle: "第3部: 既製エージェントのカスタマイズ",
+        question: "システムプロンプトやTopicに絶対に含めてはいけないものはどれか。",
+        isMulti: false,
+        options: [
+          { text: "アクションを促す動詞", correct: false },
+          { text: "業務ドメインの用語定義", correct: false },
+          { text: "実在する従業員名・ID等のPII (個人情報)", correct: true },
+          { text: "LLMへの制約条件", correct: false }
+        ],
+        explanation: "「Never Use PII in Prompts. System prompts and topics are configuration, not runtime data. Never embed real employee names, IDs, or personal information. Use tool calls to retrieve user-specific data at runtime.」と明記されています。"
+      },
+      {
+        id: 26, section: 3, sectionTitle: "第3部: 既製エージェントのカスタマイズ",
+        question: "HRチームが従業員向けに医療・歯科・視力の福利厚生に関する質問に答えるセルフサービスエージェントを提供したい。最適な事前構築テンプレートはどれか。",
+        isMulti: false,
+        options: [
+          { text: "Compensation Agent", correct: false },
+          { text: "Benefits Agent", correct: true },
+          { text: "Payslip Agent", correct: false },
+          { text: "Personal and Employment Details Agent", correct: false }
+        ],
+        explanation: "福利厚生 (medical, dental, vision benefits) に対応する事前構築エージェントは「Benefits Agent」です。"
+      },
+      {
+        id: 27, section: 3, sectionTitle: "第3部: 既製エージェントのカスタマイズ",
+        question: "Fusion HCMで、チームメンバー間の給与進捗・追加報酬・意思決定の比較を、市場ベンチマークに基づいて確認できる事前構築エージェントはどれか。",
+        isMulti: false,
+        options: [
+          { text: "Payslip Agent", correct: false },
+          { text: "Compensation Agent", correct: true },
+          { text: "Benefits Agent", correct: false },
+          { text: "Personal and Employment Details Agent", correct: false }
+        ],
+        explanation: "給与進捗(salary progression)、追加報酬、市場トレンド比較を行うのは「Compensation Agent」です。(Payslipは給与明細の照会)"
+      },
+      {
+        id: 28, section: 3, sectionTitle: "第3部: 既製エージェントのカスタマイズ",
+        question: "事前テンプレートの成果物 (artifacts) を実際に編集するときの正しい手順はどれか。",
+        isMulti: false,
+        options: [
+          { text: "テンプレートに含まれる元エージェントを直接開いて上書き保存する", correct: false },
+          { text: "元の成果物のコピーを作成 → コピーを編集 → 元をチームから削除 → コピーをチームに追加する", correct: true },
+          { text: "サポートリクエストを起票し、Oracleにテンプレートを書き換えてもらう", correct: false },
+          { text: "LLMプロバイダーを変更するだけでよい", correct: false }
+        ],
+        explanation: "「To edit the artifacts... create a copy of the artifact and edit it. After editing, remove the original artifact from the agent team, and then add the copy you created.」と明記されています。"
+      },
+
+      // 第4部: エージェントの評価とテスト (Q29-Q36)
+      {
+        id: 29, section: 4, sectionTitle: "第4部: エージェントの評価とテスト",
+        question: "エージェントテストのために評価テストデータ (Evaluation Set) を使う正しい方法はどれか。",
+        isMulti: false,
+        options: [
+          { text: "評価セットで、実行時にどのビジネスオブジェクトが利用可能かを決める", correct: false },
+          { text: "評価テストデータを使ってLLM自体を自動的にファインチューニングする", correct: false },
+          { text: "テスト入力と参照回答 (reference answers) のコレクションをアップロードし、オフラインテストでエージェント応答を比較採点する", correct: true },
+          { text: "本番トラフィックをリダイレクトして評価する", correct: false }
+        ],
+        explanation: "評価セットは質問と期待回答のペアで構成され、本番前のオフライン環境でエージェントの回答精度をベンチマーク測定するために使います。"
+      },
+      {
+        id: 30, section: 4, sectionTitle: "第4部: エージェントの評価とテスト",
+        question: "評価セットの実行モードとして「前の質問の文脈が次の質問に影響する」場合に選ぶべきモードはどれか。",
+        isMulti: false,
+        options: [
+          { text: "Sequential (順序保持実行)", correct: true },
+          { text: "Random (ランダム実行)", correct: false },
+          { text: "Parallel (並列実行)", correct: false },
+          { text: "Recursive (再帰実行)", correct: false }
+        ],
+        explanation: "「Sequential: Runs questions in the exact order you define. Use this when later questions depend on the context from earlier ones.」と定義されています。"
+      },
+      {
+        id: 31, section: 4, sectionTitle: "第4部: エージェントの評価とテスト",
+        question: "評価セットへ質問と期待回答を追加する方法としてサポートされていないものはどれか。",
+        isMulti: false,
+        options: [
+          { text: "CSVファイルのアップロード (Column1=質問、Column2=期待回答)", correct: false },
+          { text: "Debug Chatウィンドウからの追加", correct: false },
+          { text: "画面上での手動入力", correct: false },
+          { text: "本番監視ログからの自動抽出・登録", correct: true }
+        ],
+        explanation: "公式ブログでは、手動入力・CSVアップロード・Debug Chatウィンドウの3通りが挙げられており、監視ログから全自動で吸い上げる機能はありません。"
+      },
+      {
+        id: 32, section: 4, sectionTitle: "第4部: エージェントの評価とテスト",
+        question: "「エージェントの回答が、取得されたソースコンテンツにどれだけ忠実か（捏造がないか）」を測るRAG関連メトリクスはどれか。",
+        isMulti: false,
+        options: [
+          { text: "Answer Relevance", correct: false },
+          { text: "Context Relevance", correct: false },
+          { text: "Groundedness", correct: true },
+          { text: "Error Rate", correct: false }
+        ],
+        explanation: "Groundednessは「Alignment of the generated answer with the retrieved source content, indicating how faithfully the response reflects the supporting information.」と定義されています。"
+      },
+      {
+        id: 33, section: 4, sectionTitle: "第4部: エージェントの評価とテスト",
+        question: "「検索・取得した情報の質と適切さ、参照される証拠として信頼に足るか」を測るRAG指標はどれか。",
+        isMulti: false,
+        options: [
+          { text: "Groundedness", correct: false },
+          { text: "Context Relevance", correct: true },
+          { text: "Answer Relevance", correct: false },
+          { text: "Session Count", correct: false }
+        ],
+        explanation: "Context Relevanceは「Quality and appropriateness of the retrieved information, assessing whether it meets the necessary standards to be considered reliable evidence.」と定義されています。"
+      },
+      {
+        id: 34, section: 4, sectionTitle: "第4部: エージェントの評価とテスト",
+        question: "「回答がユーザーの質問にどれだけ直接的・十分・正確に応えているか」を測る指標はどれか。",
+        isMulti: false,
+        options: [
+          { text: "Groundedness", correct: false },
+          { text: "Answer Relevance", correct: true },
+          { text: "Context Relevance", correct: false },
+          { text: "Total Tokens", correct: false }
+        ],
+        explanation: "Answer Relevanceは「Degree to which the answer directly addresses the user's question, measuring how fully and precisely the content covers the required subject matter.」と定義されています。"
+      },
+      {
+        id: 35, section: 4, sectionTitle: "第4部: エージェントの評価とテスト",
+        question: "構造化されたエージェントテストにおいて必須となる2つの機能はどれか。",
+        isMulti: true,
+        options: [
+          { text: "評価テストデータ管理 (テストケースの保存・セット化)", correct: true },
+          { text: "評価ランの比較 (バージョン間・設定変更時の性能比較)", correct: true },
+          { text: "アクセス用のロールベース資格情報の動的スワップ", correct: false },
+          { text: "アプリケーションサーバのオーバークロック", correct: false }
+        ],
+        explanation: "エージェント評価の柱は「Evaluation Setによるテストケースの蓄積管理」と「Run Comparisonによるモデルやプロンプト変更前後の精度比較」です。"
+      },
+      {
+        id: 36, section: 4, sectionTitle: "第4部: エージェントの評価とテスト",
+        question: "Correctness (正確性) メトリクスに関して正しい説明はどれか。",
+        isMulti: false,
+        options: [
+          { text: "すべての本番監視ダッシュボードで常時リアルタイム表示される", correct: false },
+          { text: "エージェントの回答と評価セットの参照回答を比較し、0〜1のスコアで採点される", correct: true },
+          { text: "常に人間だけがスコア付けを行い、LLMは関与しない", correct: false },
+          { text: "消費されたトークン使用量を測る指標である", correct: false }
+        ],
+        explanation: "Correctnessは「Each score (0-1) is computed by comparing the agent's answer to the reference answer provided in the evaluation set.」と定義され、評価専用（Evaluation）のメトリクスです。"
+      },
+
+      // 第5部: エージェントの監視 (Q37-Q43)
+      {
+        id: 37, section: 5, sectionTitle: "第5部: エージェントの監視",
+        question: "経営陣が「エラー発生頻度、大半のクエリの解決速度、エージェントの品質」を四半期レビュー用にダッシュボードで見たい。適切な指標の組み合わせを2つ選べ。",
+        isMulti: true,
+        options: [
+          { text: "Prompt Injection", correct: false },
+          { text: "LLM Requests", correct: false },
+          { text: "Median Correctness (品質)", correct: true },
+          { text: "Error Rate と Median / P99 Latency (エラー率と応答時間)", correct: true }
+        ],
+        explanation: "エラー頻度＝Error Rate、解決速度＝Latency (Median / P99)、品質＝Median Correctness が対応します。"
+      },
+      {
+        id: 38, section: 5, sectionTitle: "第5部: エージェントの監視",
+        question: "補償プランニングエージェントの品質と利用状況を継続的に単一の画面で確認したい。使うべき機能はどれか。",
+        isMulti: false,
+        options: [
+          { text: "Debug Chatウィンドウ", correct: false },
+          { text: "Monitoring and Evaluationタブ", correct: true },
+          { text: "Marketplaceタブ", correct: false },
+          { text: "Credentialsタブ", correct: false }
+        ],
+        explanation: "公式ドキュメントで「Aggregate the metrics that are displayed on the Monitoring and Evaluation tab in AI Agent Studio.」と説明されており、このタブが一元管理画面となります。"
+      },
+      {
+        id: 39, section: 5, sectionTitle: "第5部: エージェントの監視",
+        question: "ダッシュボードのメトリクスを更新・集計するために定期実行するスケジュール済みプロセスの名称はどれか。",
+        isMulti: false,
+        options: [
+          { text: "Refresh AI Agent Dashboard", correct: false },
+          { text: "Aggregate AI Agent Usage and Metrics", correct: true },
+          { text: "Compute Agent KPIs", correct: false },
+          { text: "Run Evaluation Nightly", correct: false }
+        ],
+        explanation: "「Run the Aggregate AI Agent Usage and Metrics scheduled process.」と明記されており、日次などでこのプロセスをスケジュール実行することでダッシュボードが最新化されます。"
+      },
+      {
+        id: 40, section: 5, sectionTitle: "第5部: エージェントの監視",
+        question: "P99 Latency の意味として最も正しいものはどれか。",
+        isMulti: false,
+        options: [
+          { text: "全ユーザーの平均応答時間", correct: false },
+          { text: "99%のユーザーが体感する最大待ち時間 (ミリ秒)", correct: true },
+          { text: "LLMプロバイダのSLA上限値", correct: false },
+          { text: "最速1%のユーザーだけが体感する最小待ち時間", correct: false }
+        ],
+        explanation: "P99 Latencyは「The maximum wait time in milliseconds for 99% of users, revealing any areas where you should review and optimize」と定義されています。"
+      },
+      {
+        id: 41, section: 5, sectionTitle: "第5部: エージェントの監視",
+        question: "以下のメトリクスのうち、「監視 (Monitoring)」では利用でき、「評価 (Evaluation)」では利用できないものはどれか。",
+        isMulti: false,
+        options: [
+          { text: "Error Rate", correct: false },
+          { text: "Input Token Count", correct: true },
+          { text: "P99 Latency", correct: false },
+          { text: "Session Count", correct: false }
+        ],
+        explanation: "公式メトリクス対比表において、Input Token Countは「Available to Evaluate: No / Available to Monitor: Yes」となっています。"
+      },
+      {
+        id: 42, section: 5, sectionTitle: "第5部: エージェントの監視",
+        question: "監視画面で確認できる Error Count とは何を意味するか。",
+        isMulti: false,
+        options: [
+          { text: "LLMが返したトークンエラーの文字数", correct: false },
+          { text: "記録されたエラーの合計数 (Total number of errors recorded)", correct: true },
+          { text: "設定されたトークン数の上限値", correct: false },
+          { text: "アクセス拒否が発生した回数", correct: false }
+        ],
+        explanation: "Error Countは「Total number of errors recorded.」とシンプルに定義されています。"
+      },
+      {
+        id: 43, section: 5, sectionTitle: "第5部: エージェントの監視",
+        question: "監視・評価で確認できる Session Count の定義として最も近いものはどれか。",
+        isMulti: false,
+        options: [
+          { text: "ワークフローのデプロイ回数", correct: false },
+          { text: "ユーザーとAIエージェントの間で行われたユニークな会話セッションの総数", correct: true },
+          { text: "ノードの総実行回数", correct: false },
+          { text: "業務オブジェクトの読み取り回数", correct: false }
+        ],
+        explanation: "Session Countは「The number of unique conversational sessions between a user and an AI agent. One session can include multiple messages or evaluation runs.」と定義されています。"
+      },
+
+      // 第6部: セキュリティの実装 (Q44-Q50)
+      {
+        id: 44, section: 6, sectionTitle: "第6部: セキュリティの実装",
+        question: "データ検索するエージェントに、最新かつ正確なデータへのアクセスをセキュアに与えたい。最も適切な方法はどれか。",
+        isMulti: false,
+        options: [
+          { text: "エージェントのデータへのアクセスを完全にマスクする", correct: false },
+          { text: "データ重複を避けるため、Fusion外で運用する", correct: false },
+          { text: "利便性のため広範なデータエクスポートを許可する", correct: false },
+          { text: "Fusion内のBusiness Objectにアクセスさせ、セキュアな場所にあるデータを直接参照する", correct: true }
+        ],
+        explanation: "Business Objectツールは「AI agents adhere to the native security and role-based access controls of Fusion Applications, ensuring protection and privacy for your enterprise data.」と説明され、FusionネイティブのRBACにより安全性が担保されます。"
+      },
+      {
+        id: 45, section: 6, sectionTitle: "第6部: セキュリティの実装",
+        question: "各エージェントが使えるデータをきめ細かく制御する機能として最も適切なものはどれか。",
+        isMulti: false,
+        options: [
+          { text: "事前構築されたシステムプロンプト", correct: false },
+          { text: "REST toolで定義される統合設定", correct: false },
+          { text: "Document toolのフォルダ権限", correct: false },
+          { text: "FusionのRole-Based Access Control (RBAC)", correct: true }
+        ],
+        explanation: "AI Agent StudioはFusion Applicationsの職務ロール・データセキュリティ（RBAC）を継承するため、アクセス制御の基盤はRBACです。"
+      },
+      {
+        id: 46, section: 6, sectionTitle: "第6部: セキュリティの実装",
+        question: "AI Agent StudioでExternal REST APIツールを作成できるようにするために、カスタムロールに追加すべき特権 (Privilege) はどれか。",
+        isMulti: false,
+        options: [
+          { text: "ORA_FND_ADMIN_PRIV", correct: false },
+          { text: "ORA_FND_TRAP_PRIV (Create and Edit Backends for Visual Builder Studio)", correct: true },
+          { text: "ORA_HCM_USER_PRIV", correct: false },
+          { text: "ORA_SEC_CONSOLE_PRIV", correct: false }
+        ],
+        explanation: "「To create External REST API tools in AI Agent Studio, the Create and Edit Backends for Visual Builder Studio (ORA_FND_TRAP_PRIV) privilege must be added to the custom role assigned to the user.」と明記されています。"
+      },
+      {
+        id: 47, section: 6, sectionTitle: "第6部: セキュリティの実装",
+        question: "Security Consoleが権限グループ (Permission Groups) と連携するためにサイトレベルで設定が必要なプロファイル・オプションはどれか。",
+        isMulti: false,
+        options: [
+          { text: "ORA_HCM_ENABLE_ALL_AGENTS", correct: false },
+          { text: "ORA_FUSION_ENABLE_AGENT_STUDIO", correct: false },
+          { text: "ORA_ASE_SAS_INTEGRATION_ENABLED (Enable Security Console External Application Integration)", correct: true },
+          { text: "ORA_AI_AGENT_PERMISSION_MODE", correct: false }
+        ],
+        explanation: "「set the Enable Security Console External Application Integration (ORA_ASE_SAS_INTEGRATION_ENABLED) profile option at the site level.」と明記されています。"
+      },
+      {
+        id: 48, section: 6, sectionTitle: "第6部: セキュリティの実装",
+        question: "AI Agent Studioへのアクセス権を有効化する前に、LDAPからのリソース情報取り込みのために順に実行する必要がある2つのスケジュール済みプロセスはどれか。",
+        isMulti: false,
+        options: [
+          { text: "Import Resource Application Security Data → Import User and Role Application Security Data", correct: true },
+          { text: "Aggregate AI Agent Usage → Index AI Agent Studio Assistant Objects", correct: false },
+          { text: "Compile Roles → Sync Fusion Directory", correct: false },
+          { text: "Refresh LDAP → Sync AI Agent Metadata", correct: false }
+        ],
+        explanation: "公式ドキュメントに「run these two scheduled processes sequentially: 1. Import Resource Application Security Data 2. Import User and Role Application Security Data」と記載されています。"
+      },
+      {
+        id: 49, section: 6, sectionTitle: "第6部: セキュリティの実装",
+        question: "統合されたAI Help Agentを利用可能にするために毎日実行するスケジュール済みプロセスの組み合わせはどれか。",
+        isMulti: false,
+        options: [
+          { text: "Aggregate AI Agent Usage / Import User Data", correct: false },
+          { text: "Index AI Agent Studio Assistant Documents / Index AI Agent Studio Assistant Objects and Attributes", correct: true },
+          { text: "Rebuild Prompt Cache / Refresh Access Rules", correct: false },
+          { text: "Compile Agent Team / Publish Agent Team", correct: false }
+        ],
+        explanation: "「To use the integrated AI help agent, run these two scheduled processes daily: Index AI Agent Studio Assistant Documents / Index AI Agent Studio Assistant Objects and Attributes」と明記されています。"
+      },
+      {
+        id: 50, section: 6, sectionTitle: "第6部: セキュリティの実装",
+        question: "エンドユーザーが公開されたAIエージェントを画面上で見つけて利用できるようにするために必要な条件を2つ選べ。",
+        isMulti: true,
+        options: [
+          { text: "エージェントに割り当てられたセキュリティが、ユーザーのアクセス条件と一致していること", correct: true },
+          { text: "管理者によってエージェントが公開 (Publish) されていること", correct: true },
+          { text: "ユーザーがLLMプロバイダの直接アカウントを持っていること", correct: false },
+          { text: "ユーザーがAgent Studioの管理者ロールを持っていること", correct: false }
+        ],
+        explanation: "「An end-user can only see an agent if: The security assigned to the agent matches the user's access criteria, AND The agent has been published by an administrator.」と明記されています。"
+      }
+    ];
+
+    // アプリケーション状態
+    let currentFilteredList = [...quizData];
+    let currentIndex = 0;
+    let userAnswers = {}; // { questionId: [selectedIndexes] }
+    let wrongQuestionIds = new Set();
+    let currentMode = "all"; // "all" | "review"
+    let currentSection = "all";
+
+    // 音声読み上げ管理 (Web Speech API)
+    let synth = window.speechSynthesis;
+    let isTtsEnabled = true;
+    let speechRate = 1.0;
+    let currentUtterance = null;
+
+    // タイマー管理 (60分 = 3600秒)
+    let remainingSeconds = 60 * 60;
+    let timerInterval = null;
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (remainingSeconds > 0) {
+          remainingSeconds--;
+          const m = Math.floor(remainingSeconds / 60);
+          const s = remainingSeconds % 60;
+          document.getElementById('timer-display').textContent = 
+            `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        } else {
+          clearInterval(timerInterval);
+          alert('試験時間（60分）が終了しました。結果を確認してください。');
+        }
+      }, 1000);
+    }
+
+    // 音声読み上げヘルパー
+    function stopSpeech() {
+      if (synth && synth.speaking) {
+        synth.cancel();
+      }
+    }
+
+    function speakText(text, onEndCallback = null) {
+      if (!isTtsEnabled || !synth) return;
+      stopSpeech();
+
+      // 特殊記号や英語短縮コードの聞き取りやすさ調整
+      let cleanText = text
+        .replace(/Q(\d+)\./g, "第$1問。")
+        .replace(/RBAC/g, "アールバック")
+        .replace(/RAG/g, "ラグ")
+        .replace(/P99/g, "ピー99")
+        .replace(/P50/g, "ピー50")
+        .replace(/LLM/g, "エルエルエム")
+        .replace(/PII/g, "ピーアイアイ");
+
+      const utter = new SpeechSynthesisUtterance(cleanText);
+      utter.lang = 'ja-JP';
+      utter.rate = speechRate;
+      
+      // 日本語の自然な音声を探す
+      const voices = synth.getVoices();
+      const jaVoice = voices.find(v => v.lang.startsWith('ja') && (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Otoya') || v.name.includes('Kyoko')));
+      if (jaVoice) utter.voice = jaVoice;
+
+      if (onEndCallback) utter.onend = onEndCallback;
+      currentUtterance = utter;
+      synth.speak(utter);
+    }
+
+    // 問題・選択肢の読み上げシーケンス
+    function readCurrentQuestionAndOptions() {
+      if (!isTtsEnabled) return;
+      const q = currentFilteredList[currentIndex];
+      if (!q) return;
+
+      let speechString = `第${q.id}問。${q.question}。選択肢。`;
+      q.options.forEach((opt, idx) => {
+        const label = String.fromCharCode(65 + idx);
+        speechString += `、${label}、${opt.text}。`;
+      });
+
+      speakText(speechString);
+    }
+
+    // フィルタリング処理
+    function applyFilters() {
+      stopSpeech();
+      let list = [...quizData];
+
+      if (currentSection !== "all") {
+        list = list.filter(q => q.section === parseInt(currentSection, 10));
+      }
+
+      if (currentMode === "review") {
+        list = list.filter(q => wrongQuestionIds.has(q.id));
+      }
+
+      currentFilteredList = list;
+      currentIndex = 0;
+      renderNavGrid();
+      renderCurrentQuestion();
+    }
+
+    // ナビケーショングリッドの描画
+    function renderNavGrid() {
+      const grid = document.getElementById('nav-grid');
+      grid.innerHTML = '';
+
+      if (currentFilteredList.length === 0) {
+        grid.innerHTML = '<div class="col-span-5 text-center text-xs text-slate-400 py-4">対象の問題はありません</div>';
+        return;
+      }
+
+      currentFilteredList.forEach((q, idx) => {
+        const btn = document.createElement('button');
+        const isAnswered = !!userAnswers[q.id];
+        const isWrong = wrongQuestionIds.has(q.id);
+        const isCurrent = idx === currentIndex;
+
+        let baseClass = "h-8 text-xs font-bold rounded flex items-center justify-center transition ";
+        if (isCurrent) {
+          baseClass += "ring-2 ring-red-600 bg-red-50 text-red-900 border border-red-300 font-extrabold ";
+        } else if (isWrong) {
+          baseClass += "bg-rose-100 text-rose-800 border border-rose-200 ";
+        } else if (isAnswered) {
+          baseClass += "bg-emerald-100 text-emerald-800 border border-emerald-200 ";
+        } else {
+          baseClass += "bg-slate-100 hover:bg-slate-200 text-slate-600 border border-slate-200 ";
+        }
+
+        btn.className = baseClass;
+        btn.textContent = `Q${q.id}`;
+        btn.onclick = () => {
+          stopSpeech();
+          currentIndex = idx;
+          renderNavGrid();
+          renderCurrentQuestion();
+        };
+        grid.appendChild(btn);
+      });
+    }
+
+    // 問題の描画
+    function renderCurrentQuestion() {
+      const q = currentFilteredList[currentIndex];
+      const card = document.getElementById('quiz-card');
+      const expBox = document.getElementById('explanation-box');
+      const multiSubmitWrapper = document.getElementById('multi-submit-wrapper');
+
+      if (!q) {
+        document.getElementById('question-text').textContent = "表示できる問題がありません。「全50問」モードまたは別のセクションを選択してください。";
+        document.getElementById('options-container').innerHTML = '';
+        expBox.classList.add('hidden');
+        multiSubmitWrapper.classList.add('hidden');
+        return;
+      }
+
+      // バッジとカウンター
+      document.getElementById('section-badge').textContent = q.sectionTitle;
+      document.getElementById('type-badge').textContent = q.isMulti ? "複数選択" : "単一選択";
+      document.getElementById('type-badge').className = q.isMulti 
+        ? "px-2 py-0.5 text-[11px] font-semibold rounded bg-amber-100 text-amber-800 border border-amber-300"
+        : "px-2 py-0.5 text-[11px] font-semibold rounded bg-slate-100 text-slate-600 border border-slate-200";
+
+      document.getElementById('q-counter').textContent = `Q${q.id} (${currentIndex + 1}/${currentFilteredList.length})`;
+      document.getElementById('question-text').textContent = `Q${q.id}. ${q.question}`;
+
+      // 選択肢の生成
+      const optContainer = document.getElementById('options-container');
+      optContainer.innerHTML = '';
+
+      const userChoice = userAnswers[q.id] || [];
+      const hasAnswered = userAnswers[q.id] !== undefined;
+
+      // 複数選択用の確定ボタン表示切替
+      if (q.isMulti && !hasAnswered) {
+        multiSubmitWrapper.classList.remove('hidden');
+      } else {
+        multiSubmitWrapper.classList.add('hidden');
+      }
+
+      q.options.forEach((opt, idx) => {
+        const optBtn = document.createElement('button');
+        const letter = String.fromCharCode(65 + idx);
+        const isSelected = userChoice.includes(idx);
+
+        let optClass = "w-full text-left p-4 rounded-xl border text-xs md:text-sm font-medium transition flex items-start gap-3 relative ";
+
+        if (!hasAnswered) {
+          // 未回答状態
+          if (isSelected) {
+            optClass += "bg-red-50/80 border-red-500 text-red-950 ring-1 ring-red-400";
+          } else {
+            optClass += "bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-800";
+          }
+        } else {
+          // 回答後状態
+          optBtn.disabled = true;
+          if (opt.correct) {
+            optClass += "bg-emerald-50 border-emerald-400 text-emerald-950 font-semibold ring-1 ring-emerald-400";
+          } else if (isSelected && !opt.correct) {
+            optClass += "bg-rose-50 border-rose-400 text-rose-950 ring-1 ring-rose-400";
+          } else {
+            optClass += "bg-slate-50/70 border-slate-200 text-slate-400 opacity-60";
+          }
+        }
+
+        optBtn.className = optClass;
+
+        // アイコン・ラベル判定
+        let iconHtml = `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full border text-xs font-bold ${
+          isSelected ? 'bg-red-700 text-white border-red-700' : 'border-slate-300 text-slate-500 bg-slate-50'
+        }">${letter}</span>`;
+
+        if (hasAnswered) {
+          if (opt.correct) {
+            iconHtml = `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-emerald-600 text-white text-xs"><i class="fa-solid fa-check"></i></span>`;
+          } else if (isSelected) {
+            iconHtml = `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-rose-600 text-white text-xs"><i class="fa-solid fa-xmark"></i></span>`;
+          }
+        }
+
+        optBtn.innerHTML = `
+          ${iconHtml}
+          <div class="flex-1 pt-0.5 leading-relaxed">${opt.text}</div>
+        `;
+
+        optBtn.onclick = () => {
+          if (hasAnswered) return;
+          if (q.isMulti) {
+            // 複数選択トグル
+            let current = userAnswers[q.id] || [];
+            if (current.includes(idx)) {
+              current = current.filter(i => i !== idx);
+            } else {
+              current.push(idx);
+            }
+            userAnswers[q.id] = current;
+            renderCurrentQuestion();
+          } else {
+            // 単一選択即決定
+            userAnswers[q.id] = [idx];
+            processAnswer(q);
+          }
+        };
+
+        optContainer.appendChild(optBtn);
+      });
+
+      // 回答済みの場合、解説エリアを展開
+      if (hasAnswered) {
+        const correctIndexes = q.options.map((o, i) => o.correct ? i : null).filter(i => i !== null);
+        const isUserCorrect = (userChoice.length === correctIndexes.length) &&
+                              userChoice.every(i => correctIndexes.includes(i));
+
+        expBox.classList.remove('hidden');
+        const statusPill = document.getElementById('result-status-pill');
+        if (isUserCorrect) {
+          statusPill.textContent = "正解";
+          statusPill.className = "text-xs font-bold px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 border border-emerald-300";
+        } else {
+          statusPill.textContent = "不正解";
+          statusPill.className = "text-xs font-bold px-2.5 py-1 rounded bg-rose-100 text-rose-800 border border-rose-300";
+        }
+
+        const correctLetters = correctIndexes.map(i => String.fromCharCode(65 + i)).join(', ');
+        document.getElementById('explanation-text').innerHTML = `
+          <div class="font-bold text-slate-800 pb-1 text-xs">【正解】 ${correctLetters}</div>
+          <p>${q.explanation}</p>
+        `;
+      } else {
+        expBox.classList.add('hidden');
+      }
+
+      // ページャーボタン制御
+      document.getElementById('prev-btn').disabled = (currentIndex === 0);
+      document.getElementById('next-btn').textContent = (currentIndex === currentFilteredList.length - 1) ? "終了 / 一覧に戻る" : "次の問題";
+
+      updateStatistics();
+    }
+
+    // 回答判定ロジック
+    function processAnswer(q) {
+      const userChoice = userAnswers[q.id] || [];
+      const correctIndexes = q.options.map((o, i) => o.correct ? i : null).filter(i => i !== null);
+      const isUserCorrect = (userChoice.length === correctIndexes.length) &&
+                            userChoice.every(i => correctIndexes.includes(i));
+
+      if (isUserCorrect) {
+        wrongQuestionIds.delete(q.id);
+      } else {
+        wrongQuestionIds.add(q.id);
+      }
+
+      renderNavGrid();
+      renderCurrentQuestion();
+
+      // 正解・不正解の読み上げフィードバック
+      if (isTtsEnabled) {
+        const feedback = isUserCorrect ? "正解です！" : "不正解です。解説を確認してください。";
+        speakText(feedback);
+      }
+    }
+
+    // 複数選択 確定ボタン
+    document.getElementById('multi-submit-btn').onclick = () => {
+      const q = currentFilteredList[currentIndex];
+      if (!userAnswers[q.id] || userAnswers[q.id].length === 0) {
+        alert('選択肢を1つ以上選択してください。');
+        return;
+      }
+      processAnswer(q);
+    };
+
+    // 統計・進捗の更新
+    function updateStatistics() {
+      const answeredTotal = Object.keys(userAnswers).length;
+      let correctTotal = 0;
+      let wrongTotal = 0;
+
+      quizData.forEach(q => {
+        if (userAnswers[q.id] !== undefined) {
+          const correctIndexes = q.options.map((o, i) => o.correct ? i : null).filter(i => i !== null);
+          const userChoice = userAnswers[q.id];
+          const isCorrect = (userChoice.length === correctIndexes.length) &&
+                            userChoice.every(i => correctIndexes.includes(i));
+          if (isCorrect) correctTotal++;
+          else wrongTotal++;
+        }
+      });
+
+      document.getElementById('progress-text').textContent = `${answeredTotal} / 50 解答済み`;
+      const pct = Math.round((answeredTotal / 50) * 100);
+      document.getElementById('progress-bar').style.width = `${pct}%`;
+
+      document.getElementById('stat-correct').textContent = correctTotal;
+      document.getElementById('stat-wrong').textContent = wrongTotal;
+      const acc = answeredTotal === 0 ? 0 : Math.round((correctTotal / answeredTotal) * 100);
+      document.getElementById('stat-accuracy').textContent = `${acc}%`;
+
+      document.getElementById('wrong-count-badge').textContent = wrongQuestionIds.size;
+    }
+
+    // 前へ / 次へ ボタン
+    document.getElementById('prev-btn').onclick = () => {
+      if (currentIndex > 0) {
+        stopSpeech();
+        currentIndex--;
+        renderNavGrid();
+        renderCurrentQuestion();
+      }
+    };
+
+    document.getElementById('next-btn').onclick = () => {
+      stopSpeech();
+      if (currentIndex < currentFilteredList.length - 1) {
+        currentIndex++;
+        renderNavGrid();
+        renderCurrentQuestion();
+      } else {
+        alert(`全問題の確認が終了しました！\n正答率: ${document.getElementById('stat-accuracy').textContent} (${document.getElementById('stat-correct').textContent}/50)`);
+      }
+    };
+
+    // 音声読み上げコントロール
+    const ttsToggleBtn = document.getElementById('tts-toggle-btn');
+    const ttsIcon = document.getElementById('tts-icon');
+    const ttsLabel = document.getElementById('tts-label');
+
+    ttsToggleBtn.onclick = () => {
+      isTtsEnabled = !isTtsEnabled;
+      if (isTtsEnabled) {
+        ttsIcon.className = "fa-solid fa-volume-high text-emerald-400";
+        ttsLabel.textContent = "音声: 有効";
+      } else {
+        stopSpeech();
+        ttsIcon.className = "fa-solid fa-volume-xmark text-slate-400";
+        ttsLabel.textContent = "音声: 無効";
+      }
+    };
+
+    document.getElementById('tts-stop-btn').onclick = () => {
+      stopSpeech();
+    };
+
+    document.getElementById('speak-question-btn').onclick = () => {
+      readCurrentQuestionAndOptions();
+    };
+
+    document.getElementById('speak-explanation-btn').onclick = () => {
+      const q = currentFilteredList[currentIndex];
+      if (q) {
+        speakText(`公式解説。${q.explanation}`);
+      }
+    };
+
+    // 読み上げ速度スライダー
+    const rateSlider = document.getElementById('tts-rate');
+    rateSlider.oninput = (e) => {
+      speechRate = parseFloat(e.target.value);
+      document.getElementById('rate-val').textContent = `${speechRate.toFixed(1)}x`;
+    };
+
+    // セクションフィルター変更
+    document.getElementById('section-filter').onchange = (e) => {
+      currentSection = e.target.value;
+      applyFilters();
+    };
+
+    // モード切替（全問 vs 復習）
+    const modeAllBtn = document.getElementById('mode-all');
+    const modeReviewBtn = document.getElementById('mode-review');
+
+    modeAllBtn.onclick = () => {
+      currentMode = "all";
+      modeAllBtn.className = "px-3 py-2 text-xs font-semibold rounded-lg bg-red-800 text-white shadow-sm flex items-center justify-center gap-1.5";
+      modeReviewBtn.className = "px-3 py-2 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center gap-1.5";
+      applyFilters();
+    };
+
+    modeReviewBtn.onclick = () => {
+      if (wrongQuestionIds.size === 0) {
+        alert('現在、復習対象（不正解）の問題はありません！');
+        return;
+      }
+      currentMode = "review";
+      modeReviewBtn.className = "px-3 py-2 text-xs font-semibold rounded-lg bg-amber-600 text-white shadow-sm flex items-center justify-center gap-1.5";
+      modeAllBtn.className = "px-3 py-2 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center gap-1.5";
+      applyFilters();
+    };
+
+    // 初期起動
+    window.addEventListener('DOMContentLoaded', () => {
+      applyFilters();
+      startTimer();
+    });
+  </script>
+</body>
+</html>

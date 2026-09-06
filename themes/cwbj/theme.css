@@ -1,0 +1,37 @@
+:root {
+  --bg: #f6f7f8;
+  --fg: #17191c;
+  --muted: #697078;
+  --body: #30363b;
+  --accent: #356a8a;
+  --accent-strong: #1f4f70;
+  --accent-soft: #e7f0f3;
+  --accent-line: #b6cbd2;
+  --surface: #ffffff;
+  --code: #eef1f2;
+  --code-fg: #20262b;
+  --border: #d7dde0;
+  --glow-1: #eef3f0;
+  --glow-2: #f4eee8;
+  --topbar: #17191c;
+  --kicker-mark: #356a8a;
+  --cover-bg: #f6f7f8;
+  --cover-topbar: #17191c;
+  --cover-text-align: left;
+  --cover-content-align: flex-start;
+  --cover-content-width: 58%;
+  --cover-logo-width: 220px;
+  --section-bg: #eef3f0;
+  --backcover-bg: #eef3f0;
+  --backcover-logo-width: 220px;
+  --print-slide-bg: #f6f7f8;
+  --print-cover-bg: #f6f7f8;
+  --print-section-bg: #eef3f0;
+  --deck-pad-y: 54px;
+  --deck-pad-x: 84px;
+  --slide-h1-size: 42px;
+  --slide-h2-size: 32px;
+  --slide-h3-size: 21px;
+  --slide-body-size: 20px;
+  --slide-code-size: 16px;
+}
