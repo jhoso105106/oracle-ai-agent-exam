@@ -6,6 +6,16 @@ Oracle Fusion AI Agent Studio Foundations Associate（1Z0-1145-1-JPN）向けの
 
 https://jhoso105106.github.io/oracle-ai-agent-exam/index.html
 
+## にゃんこおみくじ ハンズオン
+
+PowerPoint教材の内容に沿って、AIでアプリを作り Netlify Drop で公開する初心者向けガイドです。
+
+https://jhoso105106.github.io/oracle-ai-agent-exam/hands-on.html
+
+- 手順1〜8を「前へ」「次へ」で進行
+- AIに渡すプロンプトのコピー機能
+- スマートフォンにも対応
+
 ## 機能
 
 - 50問の模擬試験（単一選択・複数選択）
@@ -42,6 +52,6 @@ python -m http.server 8000
 | ファイル | 内容 |
 | --- | --- |
 | `index.html` | GitHub Pagesで公開するアプリ本体 |
+| `hands-on.html` | にゃんこおみくじを作って公開するハンズオン |
 | `oracle_1z0_1145_1_practice_app.html` | アプリ本体のコピー |
 | `supabase-setup.sql` | SupabaseのテーブルとRLSポリシー |
-
