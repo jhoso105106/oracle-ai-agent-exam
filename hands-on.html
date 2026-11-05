@@ -327,6 +327,8 @@
     .step-sidebar {
       position: sticky;
       top: 90px;
+      grid-column: 1;
+      grid-row: 1;
       padding: 19px;
       border: 1px solid var(--line);
       border-radius: 22px;
@@ -419,6 +421,8 @@
 
     .lesson-card {
       min-height: 640px;
+      grid-column: 2;
+      grid-row: 1;
       padding: clamp(22px, 4vw, 40px);
       border: 1px solid var(--line);
       border-radius: 24px;
@@ -691,6 +695,7 @@
       .hero-art { min-height: 320px; }
       .cat-face { font-size: 6rem; }
       .workspace { grid-template-columns: 1fr; }
+      .step-sidebar, .lesson-card { grid-column: 1; grid-row: auto; }
       .step-sidebar { position: static; }
       .step-list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
       .step-link { align-items: flex-start; padding: 8px 6px; }
@@ -821,7 +826,7 @@
       <div class="workspace">
         <aside class="step-sidebar" aria-label="手順と進捗">
           <div class="sidebar-title">
-            <span>ハンズオンの進み具合</span>
+            <span>目次</span>
             <span class="sidebar-count" id="sidebar-count">1 / 8</span>
           </div>
           <div class="progress-track" role="progressbar" aria-label="ハンズオンの進捗" aria-valuemin="1" aria-valuemax="8" aria-valuenow="1" id="progress-bar">
