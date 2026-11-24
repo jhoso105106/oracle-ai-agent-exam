@@ -52,9 +52,9 @@ python -m http.server 8000
 
 `hands-on.html` のギャラリーは、投稿された作品をSupabaseに保存し、管理者が承認した作品だけを公開します。フォームでは作品名・HTTPSの公開URL・紹介文・任意のニックネームを受け付けます。投稿情報は承認前もSupabaseに保存されるため、フォーム付近の説明と同意を確認してから利用してください。
 
-1. Supabase SQL Editorで [`supabase-setup.sql`](./supabase-setup.sql) を実行する（既存の試験進捗設定に加え、ギャラリー用テーブルとRLSポリシーが作成されます）
-2. Supabase SQL Editorで `select id, project_title, project_url, description, nickname from public.student_app_gallery where is_approved = false order by created_at;` を実行して投稿を確認する
-3. 掲載する投稿だけ、確認したIDを指定して `update public.student_app_gallery set is_approved = true where id = <投稿ID>;` を実行する
+既存の試験アプリ用Supabaseプロジェクトには [`supabase-gallery-setup.sql`](./supabase-gallery-setup.sql) だけを適用してください。これはギャラリー用テーブルとRLSポリシーのみを作成し、既存の試験進捗テーブルや回答データには触れません。新しいSupabaseプロジェクトを最初から設定する場合は、[`supabase-setup.sql`](./supabase-setup.sql) に両方の設定が含まれています。
+
+Supabase SQL Editorで `select id, project_title, project_url, description, nickname from public.student_app_gallery where is_approved = false order by created_at;` を実行すると未承認投稿を確認できます。掲載する投稿だけ、確認したIDを指定して `update public.student_app_gallery set is_approved = true where id = <投稿ID>;` を実行してください。
 
 匿名投稿は承認待ち状態でのみ可能です。一般ユーザーは承認済み作品のみ読め、投稿の更新・削除や承認状態の変更はできません。公開フォームは誰でも送信できるため、管理者は投稿を確認し、不適切な投稿を承認しないでください。`service_role` keyやデータベースパスワードは公開サイトに設定しないでください。
 
@@ -66,3 +66,4 @@ python -m http.server 8000
 | `hands-on.html` | にゃんこおみくじを作って公開するハンズオン |
 | `oracle_1z0_1145_1_practice_app.html` | アプリ本体のコピー |
 | `supabase-setup.sql` | 試験進捗・作品ギャラリーのテーブルとRLSポリシー |
+| `supabase-gallery-setup.sql` | 既存Supabaseプロジェクト向けのギャラリー設定 |
