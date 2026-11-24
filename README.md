@@ -12,9 +12,10 @@ PowerPoint教材の内容に沿って、AIでアプリを作り Netlify Drop で
 
 https://jhoso105106.github.io/oracle-ai-agent-exam/hands-on.html
 
-- 手順1〜8を「前へ」「次へ」で進行
+- 手順1〜10を「前へ」「次へ」で進行
 - AIに渡すプロンプトのコピー機能
 - スマートフォンにも対応
+- 受講生アプリのギャラリー（投稿後、管理者が承認した作品のみ掲載）
 
 ## 機能
 
@@ -47,6 +48,16 @@ python -m http.server 8000
 
 `service_role` keyやデータベースパスワードは、ブラウザやGitHubへ保存しないでください。
 
+## 受講生アプリギャラリー
+
+`hands-on.html` のギャラリーは、投稿された作品をSupabaseに保存し、管理者が承認した作品だけを公開します。フォームでは作品名・HTTPSの公開URL・紹介文・任意のニックネームを受け付けます。投稿情報は承認前もSupabaseに保存されるため、フォーム付近の説明と同意を確認してから利用してください。
+
+1. Supabase SQL Editorで [`supabase-setup.sql`](./supabase-setup.sql) を実行する（既存の試験進捗設定に加え、ギャラリー用テーブルとRLSポリシーが作成されます）
+2. Supabase SQL Editorで `select id, project_title, project_url, description, nickname from public.student_app_gallery where is_approved = false order by created_at;` を実行して投稿を確認する
+3. 掲載する投稿だけ、確認したIDを指定して `update public.student_app_gallery set is_approved = true where id = <投稿ID>;` を実行する
+
+匿名投稿は承認待ち状態でのみ可能です。一般ユーザーは承認済み作品のみ読め、投稿の更新・削除や承認状態の変更はできません。公開フォームは誰でも送信できるため、管理者は投稿を確認し、不適切な投稿を承認しないでください。`service_role` keyやデータベースパスワードは公開サイトに設定しないでください。
+
 ## ファイル
 
 | ファイル | 内容 |
@@ -54,4 +65,4 @@ python -m http.server 8000
 | `index.html` | GitHub Pagesで公開するアプリ本体 |
 | `hands-on.html` | にゃんこおみくじを作って公開するハンズオン |
 | `oracle_1z0_1145_1_practice_app.html` | アプリ本体のコピー |
-| `supabase-setup.sql` | SupabaseのテーブルとRLSポリシー |
+| `supabase-setup.sql` | 試験進捗・作品ギャラリーのテーブルとRLSポリシー |

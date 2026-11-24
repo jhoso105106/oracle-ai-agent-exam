@@ -745,6 +745,149 @@
     .finish-panel p { margin: 0 0 10px; color: #56665f; font-size: .87rem; }
     .finish-panel ul { margin: 0; padding-left: 1.25rem; color: #56665f; font-size: .84rem; }
 
+    .gallery-section {
+      padding: 48px 0 78px;
+      scroll-margin-top: 84px;
+    }
+
+    .gallery-section .learning-heading { margin-bottom: 25px; }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+      gap: 15px;
+    }
+
+    .gallery-card, .gallery-empty {
+      min-width: 0;
+      padding: 19px;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: rgba(255, 255, 255, .9);
+    }
+
+    .gallery-card h3 {
+      margin: 0 0 7px;
+      font-size: 1rem;
+      overflow-wrap: anywhere;
+    }
+
+    .gallery-card p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: .84rem;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .gallery-card .gallery-author {
+      margin-bottom: 12px;
+      color: #7a718d;
+      font-size: .76rem;
+    }
+
+    .gallery-link {
+      display: inline-flex;
+      min-height: 40px;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: #f0edff;
+      color: var(--purple-dark);
+      font-size: .82rem;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .gallery-link:hover { background: var(--purple-light); }
+
+    .gallery-empty {
+      grid-column: 1 / -1;
+      margin: 0;
+      color: var(--muted);
+      font-size: .88rem;
+      text-align: center;
+    }
+
+    .gallery-form-panel {
+      margin-top: 26px;
+      padding: clamp(18px, 3vw, 28px);
+      border: 1px solid #ded9f3;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, .92);
+      box-shadow: 0 8px 26px rgba(67, 53, 130, .05);
+    }
+
+    .gallery-form-panel h3 { margin: 0 0 5px; font-size: 1.2rem; }
+    .gallery-form-intro { margin: 0 0 17px; color: var(--muted); font-size: .85rem; }
+
+    .gallery-form {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .gallery-field { display: grid; align-content: start; gap: 6px; }
+    .gallery-field.full-width { grid-column: 1 / -1; }
+    .gallery-field label { font-size: .82rem; font-weight: 800; }
+
+    .gallery-field input, .gallery-field textarea {
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 12px;
+      border: 1px solid #dcd7e8;
+      border-radius: 10px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+      font-size: .88rem;
+    }
+
+    .gallery-field textarea { min-height: 96px; resize: vertical; }
+
+    .gallery-field input:focus, .gallery-field textarea:focus {
+      border-color: var(--purple);
+      outline: 3px solid rgba(108, 92, 231, .16);
+    }
+
+    .gallery-field small { color: var(--muted); font-size: .74rem; }
+
+    .gallery-consent {
+      display: flex;
+      grid-column: 1 / -1;
+      align-items: flex-start;
+      gap: 9px;
+      color: #51595c;
+      font-size: .81rem;
+    }
+
+    .gallery-consent input { width: 18px; height: 18px; flex: 0 0 auto; margin: 3px 0 0; accent-color: var(--purple); }
+
+    .gallery-submit {
+      min-height: 48px;
+      justify-self: start;
+      padding: 10px 18px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--purple);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 850;
+    }
+
+    .gallery-submit:hover:not(:disabled) { background: var(--purple-dark); }
+    .gallery-submit:disabled { cursor: wait; opacity: .65; }
+
+    .gallery-notice, .gallery-status {
+      margin: 13px 0 0;
+      color: var(--muted);
+      font-size: .79rem;
+      overflow-wrap: anywhere;
+    }
+
+    .gallery-status { min-height: 1.5em; color: #16835d; font-weight: 750; }
+    .gallery-status.is-error { color: #b42318; }
+
     @keyframes float {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-9px); }
@@ -786,6 +929,12 @@
       .overview { grid-template-columns: 1fr; gap: 8px; margin-bottom: 40px; }
       .overview-card { padding: 12px; }
       .overview-icon { width: 40px; height: 40px; }
+      .gallery-section { padding: 35px 0 52px; scroll-margin-top: 70px; }
+      .gallery-section .learning-heading { margin-bottom: 17px; }
+      .gallery-form { grid-template-columns: 1fr; gap: 12px; }
+      .gallery-field.full-width, .gallery-consent { grid-column: 1; }
+      .gallery-form-panel { padding: 17px; border-radius: 17px; }
+      .gallery-submit { width: 100%; }
       .learning { padding: 25px 0 48px; scroll-margin-top: 70px; }
       .learning-heading { margin-bottom: 17px; }
       .learning-heading p { font-size: .84rem; }
@@ -1407,10 +1556,57 @@ Netlify Dropで公開して問題になるコードが含まれていないか�
         </div>
       </div>
     </section>
+
+    <section class="page-wrap gallery-section" id="gallery" aria-labelledby="gallery-title">
+      <div class="learning-heading">
+        <span class="eyebrow">🎨 受講生のみなさんの作品</span>
+        <h2 id="gallery-title">アプリギャラリー</h2>
+        <p>みんなが作ったアプリを見てみよう！掲載前に内容を確認します。</p>
+      </div>
+      <div class="gallery-grid" id="gallery-list" aria-live="polite">
+        <p class="gallery-empty">作品を読み込んでいます…</p>
+      </div>
+
+      <div class="gallery-form-panel">
+        <h3>あなたの作品を投稿する</h3>
+        <p class="gallery-form-intro">作品名・公開URL・紹介文を送ってください。任意でニックネームも掲載できます。</p>
+        <form class="gallery-form" id="gallery-form">
+          <div class="gallery-field">
+            <label for="gallery-title-input">作品名 <span aria-hidden="true">*</span></label>
+            <input id="gallery-title-input" name="project_title" type="text" maxlength="80" required>
+          </div>
+          <div class="gallery-field">
+            <label for="gallery-nickname">ニックネーム（任意）</label>
+            <input id="gallery-nickname" name="nickname" type="text" maxlength="30" autocomplete="off">
+            <small>本名やメールアドレスは入力しないでください。</small>
+          </div>
+          <div class="gallery-field full-width">
+            <label for="gallery-url">アプリの公開URL <span aria-hidden="true">*</span></label>
+            <input id="gallery-url" name="project_url" type="url" inputmode="url" placeholder="https://example.netlify.app" maxlength="2048" required>
+            <small>誰でも閲覧できる https:// から始まるURLを入力してください。パスワードやトークン付きURLは入力しないでください。</small>
+          </div>
+          <div class="gallery-field full-width">
+            <label for="gallery-description">作品の紹介 <span aria-hidden="true">*</span></label>
+            <textarea id="gallery-description" name="description" rows="3" maxlength="280" required></textarea>
+            <small>280文字以内</small>
+          </div>
+          <label class="gallery-consent" for="gallery-consent">
+            <input id="gallery-consent" name="consent" type="checkbox" required>
+            <span>入力した内容がSupabaseに保存され、確認・承認後に公開ギャラリーへ掲載されることを確認しました。個人情報・パスワードなどの秘密情報は含めていません。</span>
+          </label>
+          <button class="gallery-submit" id="gallery-submit" type="submit">作品を投稿する</button>
+        </form>
+        <p class="gallery-notice">ギャラリーの表示・投稿にはSupabaseを使用します。送信されるのは作品名、公開URL、紹介文、任意のニックネームです。本名・メールアドレス・パスワードは収集しません。投稿は承認されるまで公開されません。</p>
+        <p class="gallery-status" id="gallery-status" role="status" aria-live="polite"></p>
+      </div>
+    </section>
   </main>
 
   <script>
     (() => {
+      const SUPABASE_URL = "https://kypxecpqycpgeidbwlpk.supabase.co";
+      const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_Qe2mnM14yXCvcseV4Oj-Tw_1pPct12V";
+      const GALLERY_ENDPOINT = `${SUPABASE_URL}/rest/v1/student_app_gallery`;
       const startButton = document.getElementById("start-button");
       const learning = document.getElementById("learning");
       const steps = Array.from(document.querySelectorAll(".lesson-step"));
@@ -1426,8 +1622,145 @@ Netlify Dropで公開して問題になるコードが含まれていないか�
       const copyButton = document.getElementById("copy-prompt");
       const copyStatus = document.getElementById("copy-status");
       const backToTop = document.getElementById("back-to-top");
+      const galleryList = document.getElementById("gallery-list");
+      const galleryForm = document.getElementById("gallery-form");
+      const galleryStatus = document.getElementById("gallery-status");
+      const gallerySubmit = document.getElementById("gallery-submit");
       let currentStep = 0;
       let selectedPrompt = "cat";
+
+      function setGalleryStatus(message, isError = false) {
+        galleryStatus.textContent = message;
+        galleryStatus.classList.toggle("is-error", isError);
+      }
+
+      function makeGalleryMessage(message) {
+        const paragraph = document.createElement("p");
+        paragraph.className = "gallery-empty";
+        paragraph.textContent = message;
+        return paragraph;
+      }
+
+      function getHttpsUrl(value) {
+        try {
+          const url = new URL(value);
+          return url.protocol === "https:" && !url.username && !url.password ? url.href : null;
+        } catch {
+          return null;
+        }
+      }
+
+      function createGalleryCard(item) {
+        if (!item || typeof item !== "object") {
+          console.warn("不正なギャラリー項目を表示しませんでした。");
+          return null;
+        }
+        const safeUrl = getHttpsUrl(item.project_url);
+        if (!safeUrl || typeof item.project_title !== "string" || typeof item.description !== "string") {
+          console.warn("不正なギャラリー項目を表示しませんでした。");
+          return null;
+        }
+
+        const card = document.createElement("article");
+        card.className = "gallery-card";
+
+        const title = document.createElement("h3");
+        title.textContent = item.project_title;
+        card.appendChild(title);
+
+        if (typeof item.nickname === "string" && item.nickname.trim()) {
+          const author = document.createElement("p");
+          author.className = "gallery-author";
+          author.textContent = `by ${item.nickname}`;
+          card.appendChild(author);
+        }
+
+        const description = document.createElement("p");
+        description.textContent = item.description;
+        card.appendChild(description);
+
+        const link = document.createElement("a");
+        link.className = "gallery-link";
+        link.href = safeUrl;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = "アプリを開く ↗";
+        card.appendChild(link);
+        return card;
+      }
+
+      function renderGallery(items) {
+        galleryList.replaceChildren();
+        const cards = items.map(createGalleryCard).filter(Boolean);
+        if (cards.length === 0) {
+          galleryList.appendChild(makeGalleryMessage("掲載中の作品はまだありません。最初の作品を投稿してみましょう！"));
+          return;
+        }
+        galleryList.append(...cards);
+      }
+
+      async function loadGallery() {
+        try {
+          const response = await fetch(
+            `${GALLERY_ENDPOINT}?select=project_title,project_url,description,nickname&is_approved=eq.true&order=created_at.desc`,
+            {
+              headers: {
+                apikey: SUPABASE_PUBLISHABLE_KEY
+              }
+            }
+          );
+          if (!response.ok) throw new Error(`ギャラリー取得に失敗しました: HTTP ${response.status}`);
+          const items = await response.json();
+          if (!Array.isArray(items)) throw new Error("ギャラリーの応答形式が正しくありません。");
+          renderGallery(items);
+        } catch (error) {
+          galleryList.replaceChildren(makeGalleryMessage("作品を読み込めませんでした。時間をおいて再読み込みしてください。"));
+          console.error("ギャラリーの読み込みに失敗しました。", error);
+        }
+      }
+
+      async function submitGalleryEntry(event) {
+        event.preventDefault();
+        const formData = new FormData(galleryForm);
+        const projectUrlInput = galleryForm.elements.namedItem("project_url");
+        const safeUrl = getHttpsUrl(String(formData.get("project_url") || "").trim());
+        projectUrlInput.setCustomValidity(safeUrl ? "" : "https:// から始まるURLを入力してください。");
+        if (!galleryForm.reportValidity()) return;
+
+        const entry = {
+          project_title: String(formData.get("project_title")).trim(),
+          project_url: safeUrl,
+          description: String(formData.get("description")).trim(),
+          nickname: String(formData.get("nickname") || "").trim() || null
+        };
+
+        gallerySubmit.disabled = true;
+        gallerySubmit.textContent = "送信中…";
+        setGalleryStatus("投稿を送信しています…");
+        try {
+          const response = await fetch(GALLERY_ENDPOINT, {
+            method: "POST",
+            headers: {
+              apikey: SUPABASE_PUBLISHABLE_KEY,
+              "Content-Type": "application/json",
+              Prefer: "return=minimal"
+            },
+            body: JSON.stringify(entry)
+          });
+          if (!response.ok) {
+            const detail = await response.text();
+            throw new Error(`投稿の送信に失敗しました: HTTP ${response.status} ${detail}`);
+          }
+          galleryForm.reset();
+          setGalleryStatus("投稿を受け付けました！内容を確認後、ギャラリーに掲載します。");
+        } catch (error) {
+          setGalleryStatus("投稿を送信できませんでした。設定または通信状況をご確認ください。", true);
+          console.error("ギャラリー投稿の送信に失敗しました。", error);
+        } finally {
+          gallerySubmit.disabled = false;
+          gallerySubmit.textContent = "作品を投稿する";
+        }
+      }
 
       function selectPrompt(choice) {
         selectedPrompt = choice;
@@ -1534,10 +1867,12 @@ Netlify Dropで公開して問題になるコードが含まれていないか�
         button.addEventListener("click", () => selectPrompt(button.dataset.promptChoice));
       });
       copyButton.addEventListener("click", copyPrompt);
+      galleryForm.addEventListener("submit", submitGalleryEntry);
       backToTop.addEventListener("click", () => {
         learning.hidden = true;
         document.getElementById("top").scrollIntoView({ behavior: "smooth", block: "start" });
       });
+      loadGallery();
     })();
   </script>
 </body>
