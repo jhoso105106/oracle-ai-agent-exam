@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#6c5ce7">
-  <meta name="description" content="AIにお願いして、にゃんこおみくじを作って公開する初心者向け8ステップのハンズオンです。">
-  <title>にゃんこおみくじを作って公開しよう！｜はじめてのAIハンズオン</title>
+  <meta name="description" content="ネコ好き向け・犬好き向けのプロンプトから選んで、AIでアプリを作りNetlify Dropで公開する初心者向け10ステップのハンズオンです。">
+  <title>AIでアプリを作って公開しよう！｜はじめてのAIハンズオン</title>
   <style>
     :root {
       color-scheme: light;
@@ -356,7 +356,7 @@
     }
 
     .progress-fill {
-      width: 12.5%;
+      width: 10%;
       height: 100%;
       border-radius: inherit;
       background: linear-gradient(90deg, var(--purple), #a29bfe);
@@ -552,6 +552,66 @@
     }
 
     .prompt-top strong { font-size: .81rem; }
+    .prompt-choice {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 14px 0;
+    }
+
+    .choice-button {
+      min-height: 40px;
+      padding: 8px 14px;
+      border: 1px solid #ded9ef;
+      border-radius: 11px;
+      background: var(--white);
+      color: #596164;
+      cursor: pointer;
+      font-size: .84rem;
+      font-weight: 800;
+    }
+
+    .choice-button[aria-pressed="true"] {
+      border-color: var(--purple);
+      background: #f0edff;
+      color: var(--purple-dark);
+    }
+
+    .choice-button:focus-visible {
+      outline: 3px solid #2d3436;
+      outline-offset: 3px;
+    }
+
+    .prompt-choice-note {
+      margin: 8px 14px 0;
+      color: var(--muted);
+      font-size: .78rem;
+    }
+
+    .lesson-step details {
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: #fdfcff;
+    }
+
+    .lesson-step details summary {
+      padding: 12px 15px;
+      color: var(--purple-dark);
+      cursor: pointer;
+      font-size: .86rem;
+      font-weight: 800;
+    }
+
+    .lesson-step details > div {
+      padding: 0 15px 14px;
+      color: var(--muted);
+      font-size: .84rem;
+    }
+
+    .lesson-step details p:last-child,
+    .lesson-step details ul:last-child { margin-bottom: 0; }
+
     .copy-button {
       display: inline-flex;
       align-items: center;
@@ -771,10 +831,11 @@
   <main>
     <section class="page-wrap hero" id="top" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <span class="eyebrow">✨ はじめてでも大丈夫。8ステップで完成！</span>
+        <span class="eyebrow">✨ はじめてでも大丈夫。10ステップで完成！</span>
         <h1 id="hero-title">にゃんこおみくじを<br><em>作って公開しよう！</em></h1>
         <p class="hero-lead">
-          AIにお願いして、かわいいアプリを作ってみよう。<br>
+          ネコ好きは「にゃんこおみくじ」、犬好きは「といぷー駄菓子ガチャ」。<br>
+          好きな動物のプロンプトを選んで、AIにお願いしてみよう。<br>
           <strong>プログラミングの知識がなくてもOK！</strong><br>
           最後は自分だけのURLで、世界に公開できます。
         </p>
@@ -819,7 +880,7 @@
     <section class="page-wrap learning" id="learning" hidden aria-labelledby="learning-title">
       <div class="learning-heading">
         <span class="eyebrow">さあ、やってみよう！</span>
-        <h2 id="learning-title">公開までの8ステップ</h2>
+        <h2 id="learning-title">公開までの10ステップ</h2>
         <p>ひとつずつ進めれば大丈夫。いつでも「前へ」で戻れます。</p>
       </div>
 
@@ -827,9 +888,9 @@
         <aside class="step-sidebar" aria-label="手順と進捗">
           <div class="sidebar-title">
             <span>目次</span>
-            <span class="sidebar-count" id="sidebar-count">1 / 8</span>
+            <span class="sidebar-count" id="sidebar-count">1 / 10</span>
           </div>
-          <div class="progress-track" role="progressbar" aria-label="ハンズオンの進捗" aria-valuemin="1" aria-valuemax="8" aria-valuenow="1" id="progress-bar">
+          <div class="progress-track" role="progressbar" aria-label="ハンズオンの進捗" aria-valuemin="1" aria-valuemax="10" aria-valuenow="1" id="progress-bar">
             <div class="progress-fill" id="progress-fill"></div>
           </div>
           <nav class="step-list" aria-label="手順一覧">
@@ -840,7 +901,9 @@
             <button class="step-link" type="button" data-go-step="4"><span class="step-number">5</span><span class="step-label">動きを確かめる</span></button>
             <button class="step-link" type="button" data-go-step="5"><span class="step-number">6</span><span class="step-label">Netlify Dropを開く</span></button>
             <button class="step-link" type="button" data-go-step="6"><span class="step-number">7</span><span class="step-label">ファイルを公開</span></button>
-            <button class="step-link" type="button" data-go-step="7"><span class="step-number">8</span><span class="step-label">URLを開いて完成</span></button>
+            <button class="step-link" type="button" data-go-step="7"><span class="step-number">8</span><span class="step-label">ファイル名を確認</span></button>
+            <button class="step-link" type="button" data-go-step="8"><span class="step-number">9</span><span class="step-label">Googleでログイン</span></button>
+            <button class="step-link" type="button" data-go-step="9"><span class="step-number">10</span><span class="step-label">公開してURLをコピー</span></button>
           </nav>
           <div class="safety-note">
             <strong>🔒 公開前に確認</strong>
@@ -850,7 +913,7 @@
 
         <div class="lesson-card" id="lesson-card" aria-live="polite">
           <section class="lesson-step" data-step="0" aria-labelledby="step-title-1">
-            <div class="lesson-kicker"><span class="step-badge">手順 1 / 8</span><span class="lesson-duration">まずは準備</span></div>
+            <div class="lesson-kicker"><span class="step-badge">手順 1 / 10</span><span class="lesson-duration">まずは準備</span></div>
             <h2 id="step-title-1">AIのチャット画面を開こう</h2>
             <p class="lesson-intro">文章でお願いすると、答えてくれる<strong>チャットAI</strong>を使います。使いやすいものをひとつ選びましょう。</p>
             <ul class="instruction-list">
@@ -867,64 +930,335 @@
           </section>
 
           <section class="lesson-step" data-step="1" aria-labelledby="step-title-2" hidden>
-            <div class="lesson-kicker"><span class="step-badge">手順 2 / 8</span><span class="lesson-duration">コピーするだけ</span></div>
-            <h2 id="step-title-2">プロンプトをコピーしよう</h2>
-            <p class="lesson-intro">下の文章をぜんぶコピーします。この<strong>お願いの文章</strong>を、AIにそのまま使います。</p>
+            <div class="lesson-kicker"><span class="step-badge">手順 2 / 10</span><span class="lesson-duration">好きな動物を選ぼう</span></div>
+            <h2 id="step-title-2">ネコ好き？犬好き？</h2>
+            <p class="lesson-intro">作りたいアプリに合わせて、ネコ好きは「にゃんこおみくじ」、犬好きは「といぷー駄菓子ガチャ」のプロンプトを選んでコピーしましょう。</p>
             <div class="prompt-panel">
-              <div class="prompt-top"><strong>📋 プロンプト（コピー用）</strong><button class="copy-button" id="copy-prompt" type="button"><span aria-hidden="true">▢</span> プロンプトをコピー</button></div>
-              <pre class="prompt-text" id="prompt-text">index.html という1つのファイルで、
-
-かわいいアニメーション付きの「にゃんこおみくじ」Webアプリを作ってください。
+              <div class="prompt-top"><strong>📋 好きな動物のプロンプトを選んでね</strong><button class="copy-button" id="copy-prompt" type="button"><span aria-hidden="true">▢</span> プロンプトをコピー</button></div>
+              <div class="prompt-choice" role="group" aria-label="好きな動物を選択">
+                <button class="choice-button" type="button" data-prompt-choice="cat" aria-pressed="true">🐱 ネコ好き</button>
+                <button class="choice-button" type="button" data-prompt-choice="dog" aria-pressed="false">🐶 犬好き</button>
+              </div>
+              <p class="prompt-choice-note" id="prompt-choice-note">にゃんこおみくじを作るプロンプトです。</p>
+              <pre class="prompt-text" id="cat-prompt">index.html 1ファイルで、かわいいアニメーション付きの「にゃんこおみくじ」Webアプリを作ってください。
 
 【機能】
+・HTML・CSS・JavaScriptは、すべてindex.htmlにまとめる
+・「おみくじを振る！」ボタンで、おみくじ筒が揺れて棒が飛び出す
+・大吉・中吉・小吉・吉などの結果と、ラッキーカラー・ラッキーフードをランダムに表示する
+・ネコの絵文字を使ったかわいいデザインで、スマホでも見やすいレスポンシブにする
 
-・HTML・CSS・JavaScriptを、すべてindex.htmlの1ファイルにまとめる
+【安全性】Netlify Dropで公開する予定です。以下を必ず守ってください。
+・個人情報を入力・保存・送信しない（入力フォームも作らない）
+・パスワード、APIキー、アクセストークンなどの秘密情報をコードに含めない
+・外部APIやデータベースに接続せず、外部通信は行わない（広告・アクセス解析・トラッキングも入れない）
+・CookieやlocalStorageに利用者情報を保存しない
+・外部JavaScriptライブラリは使わず、抽選はブラウザ内のJavaScriptだけで行う
+・HTMLを開くだけで動く静的Webアプリにする
 
-・「おみくじを振る！」ボタンを押すと、おみくじ筒が揺れて棒が飛び出す
+【公開前チェック】
+最後に「外部通信」「個人情報」「秘密情報」「外部API」の4項目について、公開して問題になるコードがないか確認してください。
 
-・大吉・中吉・小吉・吉などの結果をランダムに表示する
+完成した index.html を出力してください。</pre>
+              <pre class="prompt-text" id="dog-prompt" hidden>添付したトイプードルの画像をキャラクターとして使い、
 
-・ラッキーカラーとラッキーフードもランダムに表示する
+かわいい「といぷー駄菓子ガチャ」というWebアプリを作ってください。
 
-・ネコの絵文字を使った、かわいいデザインにする
+【コンセプト】
 
-・スマートフォンでも見やすいレスポンシブデザインにする
+ガチャを回すと、といぷーから「今日のごほうび」として
 
-【安全性について】
+いろいろな駄菓子がランダムで出てくる、かわいいミニWebアプリです。
 
-このWebアプリはNetlify Dropでインターネットに公開する予定です。
+子どもでも大人でも思わず何度も回したくなるような、
 
-そのため、以下の条件を必ず守ってください。
+駄菓子屋さん＋ガチャガチャ＋かわいいトイプードルの世界観にしてください。
 
-・個人情報を入力・保存・送信する機能を作らない
+【といぷーのデザイン】
 
-・パスワード、APIキー、アクセストークン、秘密情報をコードに含めない
+添付画像のトイプードルをメインキャラクターとして使用してください。
 
-・外部APIやデータベースに接続しない
+特徴：
 
-・CookieやlocalStorageなどに利用者情報を保存しない
+・アプリコット色
+
+・もこもこの丸い頭
+
+・ふわふわした垂れ耳
+
+・黒くて丸いつやのある目
+
+・小さな茶色の鼻
+
+・やわらかい茶色の輪郭
+
+・絵本や水彩、色鉛筆のような温かいタッチ
+
+可能な限り、このキャラクターの雰囲気をアプリ全体で統一してください。
+
+【画面デザイン】
+
+タイトル：
+
+🐩 といぷー駄菓子ガチャ
+
+サブタイトル：
+
+「今日は何が出るかな？
+
+といぷーからのごほうびガチャ！」
+
+画面中央には、レトロでかわいいガチャガチャマシンを配置してください。
+
+ガチャマシンは
+
+・クリーム
+
+・ピンク
+
+・アプリコット
+
+を中心としたパステルカラーにします。
+
+透明なドームの中には、
+
+ピンク、黄色、水色、緑、紫などの
+
+カラフルなカプセルを入れてください。
+
+ガチャガチャの横に、
+
+添付画像のといぷーを配置してください。
+
+【ガチャの動き】
+
+「ガチャを回す！」ボタンを押すと、
+
+1. ガチャマシンがガタガタ揺れる
+
+2. 中のカプセルが動く
+
+3. ハンドルが回る
+
+4. カプセルが「コロン！」と出てくる
+
+5. カプセルがパカッと開く
+
+6. 今日の駄菓子が発表される
+
+というアニメーションにしてください。
+
+結果が出たときには、
+
+✨、⭐、🍬などが飛び出す演出も入れてください。
+
+SSRやSECRETが出た場合は、
+
+通常より豪華なキラキラ・紙吹雪などの演出にしてください。
+
+【ガチャから出てくるもの】
+
+いろいろな駄菓子をランダムで出してください。
+
+例：
+
+N
+
+🍬 フルーツキャンディ
+
+「カラフルで甘い、ちいさなごほうび。」
+
+N
+
+🍫 ひとくちチョコ
+
+「がんばったあとには甘いもの！」
+
+R
+
+🍘 サクサクおせんべい
+
+「いい音させて食べるぷー！」
+
+R
+
+🍪 どうぶつビスケット
+
+「どの形が出たかな？」
+
+SR
+
+🍭 ぐるぐるキャンディ
+
+「今日はちょっといい日だぷー！」
+
+SR
+
+🍩 ミニドーナツ
+
+「ひと休みして食べるぷー。」
+
+SSR
+
+🌽 コーンスナック
+
+「大当たり！今日はツイてるぷー！」
+
+SSR
+
+🍫 スペシャルチョコ
+
+「とっておき、あげるぷー！」
+
+🌈 SECRET
+
+🎁 駄菓子つめあわせ
+
+「大当たり！！
+
+今日は好きな駄菓子をいっぱい選んでいいぷー！」
+
+SECRETは1〜2％程度の確率にしてください。
+
+【駄菓子の絵】
+
+駄菓子を単純な絵文字だけで表示するのではなく、
+
+可能であればCSSやHTMLでかわいいイラスト風に表現してください。
+
+あるいは画像生成が利用できる場合は、
+
+アプリ用のオリジナル駄菓子イラストを作成してください。
+
+駄菓子イラストは、
+
+・水彩
+
+・色鉛筆
+
+・絵本風
+
+・パステルカラー
+
+・やさしい茶色の輪郭線
+
+で統一し、といぷーのイラストと同じ世界観にしてください。
+
+実在する商品のロゴやパッケージは使用せず、
+
+架空のオリジナル駄菓子として描いてください。
+
+【結果画面】
+
+ガチャ結果はカード形式で、
+
+★★★★★
+
+SSR
+
+🌽
+
+「コーンスナック」
+
+サクサク止まらない、
+
+今日の大当たりおやつ！
+
+🐩
+
+「今日はツイてるぷー！」
+
+のように表示してください。
+
+下に
+
+「🐾 もう1回まわす！」
+
+ボタンを表示してください。
+
+【スマホ対応】
+
+スマートフォンで遊ぶことを前提にしてください。
+
+・縦長デザイン
+
+・大きなボタン
+
+・文字を読みやすくする
+
+・画面から要素がはみ出さない
+
+・タップしやすいサイズ
+
+・かわいいけれど、ごちゃごちゃしすぎない
+
+ようにしてください。
+
+【技術仕様】
+
+・index.html 1ファイルで動くようにする
+
+・HTML、CSS、JavaScriptはすべてindex.htmlにまとめる
+
+・外部JavaScriptライブラリは使用しない
+
+・ブラウザだけで抽選を行う
+
+・HTMLを開くだけで遊べる静的Webアプリにする
+
+・Netlify Dropに配置して公開できるようにする
+
+【安全性】
+
+以下を必ず守ってください。
+
+・個人情報を入力させない
 
 ・入力フォームを作らない
 
-・ユーザーの入力内容を外部サービスへ送信しない
+・個人情報を保存しない
 
-・広告、アクセス解析、トラッキング機能を入れない
+・個人情報を送信しない
 
-・不要な外部JavaScriptライブラリを使用しない
+・パスワードをコードに含めない
 
-・おみくじの抽選はJavaScriptのブラウザ内処理だけで完結させる
+・APIキーをコードに含めない
 
-・可能な限り外部通信を行わない
+・アクセストークンをコードに含めない
 
-・HTMLを開くだけで動作する静的Webアプリにする
+・外部APIを使用しない
 
-【公開前チェック】
+・外部データベースを使用しない
 
-コードを生成した最後に、
+・広告を入れない
 
-「外部通信」「個人情報」「秘密情報」「外部API」の4項目について、
+・アクセス解析を入れない
 
-公開して問題になるコードが含まれていないか確認してください。</pre>
+・トラッキングを行わない
+
+・Cookieを使用しない
+
+・localStorageに利用者情報を保存しない
+
+・外部通信を行わない
+
+【完成時のチェック】
+
+完成したら必ずコードを確認して、
+
+1. 外部通信
+
+2. 個人情報
+
+3. 秘密情報
+
+4. 外部API
+
+の4項目について、
+
+Netlify Dropで公開して問題になるコードが含まれていないかチェックしてください。
+
+最後に完成した index.html を出力してください。</pre>
               <p class="copy-status" id="copy-status" role="status" aria-live="polite"></p>
             </div>
             <div class="info-box"><span class="info-icon" aria-hidden="true">💡</span><p>「プロンプト」は<strong>AIへのお願いの文章</strong>のこと。ボタンでコピーできないときは、文章を選択してコピーしても大丈夫です。</p></div>
@@ -932,7 +1266,7 @@
           </section>
 
           <section class="lesson-step" data-step="2" aria-labelledby="step-title-3" hidden>
-            <div class="lesson-kicker"><span class="step-badge">手順 3 / 8</span><span class="lesson-duration">AIにお願い</span></div>
+            <div class="lesson-kicker"><span class="step-badge">手順 3 / 10</span><span class="lesson-duration">AIにお願い</span></div>
             <h2 id="step-title-3">AIに貼り付けて送ろう</h2>
             <p class="lesson-intro">さきほど開いたAIのチャット画面に、コピーした文章を貼り付けて送ります。</p>
             <ul class="instruction-list">
@@ -940,12 +1274,12 @@
               <li><span class="check-icon">2</span><span>貼り付ける（Windowsは Ctrl + V ／ Macは Command + V）</span></li>
               <li><span class="check-icon">3</span><span>送信ボタンを押して、AIが作り終わるまで少し待つ</span></li>
             </ul>
-            <div class="info-box"><span class="info-icon" aria-hidden="true">⏳</span><p>AIがコードを作り始めます。長い返事が出ても大丈夫です。<strong>「ダウンロード」や「index.html」</strong>が表示されるか確認しましょう。</p></div>
+            <div class="info-box"><span class="info-icon" aria-hidden="true">⏳</span><p>犬好きのプロンプトを選んだ場合は、<strong>トイプードルの画像もチャットに添付してから</strong>送信してください。AIがコードを作り始めます。長い返事が出ても大丈夫です。「ダウンロード」や「index.html」が表示されるか確認しましょう。</p></div>
             <div class="term-row"><span class="term-tag">ことば</span><p><strong>貼り付け（ペースト）</strong>：コピーした文章を、入力欄に入れること。</p></div>
           </section>
 
           <section class="lesson-step" data-step="3" aria-labelledby="step-title-4" hidden>
-            <div class="lesson-kicker"><span class="step-badge">手順 4 / 8</span><span class="lesson-duration">パソコンに保存</span></div>
+            <div class="lesson-kicker"><span class="step-badge">手順 4 / 10</span><span class="lesson-duration">パソコンに保存</span></div>
             <h2 id="step-title-4">index.html をダウンロードしよう</h2>
             <p class="lesson-intro">AIの返事から完成したファイルを見つけて、パソコンに保存します。</p>
             <ul class="instruction-list">
@@ -958,7 +1292,7 @@
           </section>
 
           <section class="lesson-step" data-step="4" aria-labelledby="step-title-5" hidden>
-            <div class="lesson-kicker"><span class="step-badge">手順 5 / 8</span><span class="lesson-duration">できたかチェック</span></div>
+            <div class="lesson-kicker"><span class="step-badge">手順 5 / 10</span><span class="lesson-duration">できたかチェック</span></div>
             <h2 id="step-title-5">パソコンで動きを確かめよう</h2>
             <p class="lesson-intro">公開する前に、自分のパソコンでアプリを開いて試します。</p>
             <ul class="instruction-list">
@@ -966,12 +1300,12 @@
               <li><span class="check-icon">2</span><span>Chrome や Edge などのブラウザーで開く</span></li>
               <li><span class="check-icon">3</span><span>「おみくじを振る！」ボタンを押して、結果が出るか試す</span></li>
             </ul>
-            <div class="info-box"><span class="info-icon" aria-hidden="true">🐾</span><p>ネコやおみくじが動いて、運勢・ラッキーカラー・ラッキーフードが表示されたら成功です！何度か押して、結果が変わるかも試してみましょう。</p></div>
+            <div class="info-box"><span class="info-icon" aria-hidden="true">🐾</span><p>選んだ動物のキャラクターやアプリの動きが表示されたら成功です！ボタンを何度か押して、結果が変わるかも試してみましょう。</p></div>
             <div class="term-row"><span class="term-tag">ことば</span><p><strong>ブラウザー</strong>：Webサイトを見るためのアプリ。Chrome や Edge などがあります。</p></div>
           </section>
 
           <section class="lesson-step" data-step="5" aria-labelledby="step-title-6" hidden>
-            <div class="lesson-kicker"><span class="step-badge">手順 6 / 8</span><span class="lesson-duration">公開の準備</span></div>
+            <div class="lesson-kicker"><span class="step-badge">手順 6 / 10</span><span class="lesson-duration">公開の準備</span></div>
             <h2 id="step-title-6">Netlify Drop を開こう</h2>
             <p class="lesson-intro">ファイルを置くだけでWebサイトを公開できるサービス、<strong>Netlify Drop</strong>を使います。</p>
             <ul class="instruction-list">
@@ -985,7 +1319,7 @@
           </section>
 
           <section class="lesson-step" data-step="6" aria-labelledby="step-title-7" hidden>
-            <div class="lesson-kicker"><span class="step-badge">手順 7 / 8</span><span class="lesson-duration">あと少し！</span></div>
+            <div class="lesson-kicker"><span class="step-badge">手順 7 / 10</span><span class="lesson-duration">あと少し！</span></div>
             <h2 id="step-title-7">index.html をドロップしよう</h2>
             <p class="lesson-intro">パソコンに保存したファイルを、Netlify Drop の点線エリアに入れます。</p>
             <ul class="instruction-list">
@@ -998,27 +1332,70 @@
           </section>
 
           <section class="lesson-step" data-step="7" aria-labelledby="step-title-8" hidden>
-            <div class="lesson-kicker"><span class="step-badge">手順 8 / 8</span><span class="lesson-duration">完成！</span></div>
-            <h2 id="step-title-8">公開されたURLを開こう</h2>
-            <p class="lesson-intro">アップロードが終わると、Webサイトの住所である<strong>URL</strong>が表示されます。</p>
+            <div class="lesson-kicker"><span class="step-badge">手順 8 / 10</span><span class="lesson-duration">ボタンを確認</span></div>
+            <h2 id="step-title-8">ファイル名を確認して公開しよう</h2>
+            <p class="lesson-intro">アップロードしたファイルの名前を確認する画面が表示されたら、公開方法を選びます。</p>
             <ul class="instruction-list">
-              <li><span class="check-icon">1</span><span>表示されたURLをクリックして、公開サイトを開く</span></li>
-              <li><span class="check-icon">2</span><span>公開されたページでも「おみくじを振る！」を押してみる</span></li>
-              <li><span class="check-icon">3</span><span>うまく動いたら、URLを友だちに送ってみよう！</span></li>
+              <li><span class="check-icon">1</span><span>「Rename and deploy」（名前を変更して公開）のボタンを押す</span></li>
+              <li><span class="check-icon">2</span><span><strong>index (4).html</strong> のような名前でも、このボタンを押せばNetlifyが公開用の名前に直してくれます</span></li>
+              <li><span class="check-icon">3</span><span>「Deploy without renaming」は選ばず、公開処理が終わるまで待つ</span></li>
+            </ul>
+            <div class="info-box"><span class="info-icon" aria-hidden="true">✅</span><p>ボタンの表示や画面構成は更新されることがあります。迷ったら、名前を変更してデプロイする選択肢を選んでください。</p></div>
+            <div class="term-row"><span class="term-tag">ことば</span><p><strong>Deploy（デプロイ）</strong>：作ったWebサイトをインターネットで見られるように公開すること。</p></div>
+          </section>
+
+          <section class="lesson-step" data-step="8" aria-labelledby="step-title-9" hidden>
+            <div class="lesson-kicker"><span class="step-badge">手順 9 / 10</span><span class="lesson-duration">Netlifyにログイン</span></div>
+            <h2 id="step-title-9">Gmail（Google）でログインしよう</h2>
+            <p class="lesson-intro">アップロードしたサイトを自分のものとして登録するため、Netlifyの画面からGoogleアカウントでログインします。</p>
+            <ul class="instruction-list">
+              <li><span class="check-icon">1</span><span>Netlifyの画面で <strong>Claim this site</strong> を押す</span></li>
+              <li><span class="check-icon">2</span><span><strong>Continue with Google</strong> を選ぶ</span></li>
+              <li><span class="check-icon">3</span><span>Googleの画面で、自分のGmailアドレスを選ぶ</span></li>
+            </ul>
+            <div class="info-box"><span class="info-icon" aria-hidden="true">🔐</span><p>ログインはNetlifyとGoogleの公式画面で行います。<strong>このハンズオンページやAIチャットに、パスワードを入力・共有する必要はありません。</strong>画面に自分のメールアドレスが表示されても、他の人に見せたりスクリーンショットを共有したりしないでください。</p></div>
+            <div class="term-row"><span class="term-tag">ことば</span><p><strong>Claim this site</strong>：アップロードしたサイトを、自分のNetlifyアカウントに登録すること。</p></div>
+          </section>
+
+          <section class="lesson-step" data-step="9" aria-labelledby="step-title-10" hidden>
+            <div class="lesson-kicker"><span class="step-badge">手順 10 / 10</span><span class="lesson-duration">公開して完成！</span></div>
+            <h2 id="step-title-10">公開設定をしてURLをコピーしよう</h2>
+            <p class="lesson-intro">最後に公開範囲を設定して、完成したWebサイトのURLを取得します。</p>
+            <ul class="instruction-list">
+              <li><span class="check-icon">1</span><span>公開範囲を <strong>Public</strong> に設定する</span></li>
+              <li><span class="check-icon">2</span><span><strong>Copy project URL</strong> を押して、サイトのURLをコピーする</span></li>
+              <li><span class="check-icon">3</span><span>URLを開いて動作を確かめ、共有する場合は友だちに送る</span></li>
             </ul>
             <span class="url-display">https://あなたのサイト名.netlify.app</span>
-            <div class="info-box warning"><span class="info-icon" aria-hidden="true">🌍</span><p>URLを知っている人なら誰でも見られます。人に見られてもよい内容か、確認してから公開・共有しましょう。</p></div>
+            <a class="service-link" href="https://serene-hotteok-e0f66f.netlify.app" target="_blank" rel="noopener noreferrer"><span>🐱 講師の公開サンプルを見る ↗</span><small class="service-url">https://serene-hotteok-e0f66f.netlify.app</small></a>
+            <div class="info-box warning"><span class="info-icon" aria-hidden="true">🌍</span><p>「Public」にすると、URLを知っている人なら誰でも見られます。個人情報・パスワード・APIキーなどがファイルに含まれていないか確認してから公開してください。</p></div>
             <div class="finish-panel">
               <h3>🎉 おつかれさまでした！</h3>
               <p>今日できるようになったこと：</p>
               <ul>
                 <li>AIにお願いしてアプリを作る</li>
-                <li>動きとランダムのしくみを確かめる</li>
-                <li>Netlify Drop で世界に公開する</li>
+                <li>ファイルを確認して、Netlifyで公開する</li>
+                <li>公開URLをコピーして共有する</li>
               </ul>
-              <p style="margin-top: 12px"><strong>次の一歩：</strong> BGMや効果音をつけたり、友だち専用のメッセージを入れたりしてみよう。</p>
+              <p style="margin-top: 12px"><strong>次の一歩：</strong> おみくじをカスタマイズしたり、BGMや効果音をつけたりしてみよう。</p>
             </div>
             <div class="term-row"><span class="term-tag">ことば</span><p><strong>URL</strong>：Webサイトの住所。例：<code>https://xxxxxx.netlify.app</code></p></div>
+            <details>
+              <summary>自分流にカスタマイズしてみよう</summary>
+              <div><p>AIにひとつお願いして、新しいファイルを作ってみましょう。</p><ul><li>「凶も足して」— おみくじの結果を増やす</li><li>「ネコをウサギにして」— キャラクターを変える</li><li>「ラッキーソングにして」— ラッキー項目を変える</li></ul></div>
+            </details>
+            <details>
+              <summary>アプリは3つの部品でできている</summary>
+              <div><ul><li><strong>HTML（骨組み）</strong>：文字・ボタン・キャラクターを画面に並べる</li><li><strong>CSS（デザインと動き）</strong>：色やレイアウト、揺れる・跳ねる動きを決める</li><li><strong>JavaScript（仕掛け）</strong>：ボタンを押したときに抽選し、ランダムな結果を出す</li></ul><p><code>@keyframes</code> はCSSで動きの流れを作る書き方、<code>setTimeout()</code> は指定した時間のあとに処理を行う命令です。</p></div>
+            </details>
+            <details>
+              <summary>うまくいかないときはここを確認</summary>
+              <div><ul><li>ファイル名が <code>index (1).html</code> などになった：手順8で「Rename and deploy」を選ぶ</li><li>動かない・一部しか表示されない：AIに「HTML1ファイルにまとめて」と頼み、再度ダウンロードする</li><li>AIがコードを文字で表示するだけ：「ダウンロードできるようにして」と頼む</li><li>Netlify Dropで公開できない：<code>index.html</code> または、そのファイルを入れたフォルダーを点線エリアにドロップする</li></ul></div>
+            </details>
+            <details>
+              <summary>公開するときの安全チェック</summary>
+              <div><ul><li>公開サイトはURLを知っている人なら誰でも見られます</li><li>個人情報・パスワード・APIキーなどをファイルに書かない</li><li>入力・保存をしないアプリであることを確認する</li><li>人に見られてよい内容かを確認してから公開する</li></ul></div>
+            </details>
           </section>
 
           <div class="nav-row">
@@ -1044,11 +1421,28 @@
       const progressFill = document.getElementById("progress-fill");
       const sidebarCount = document.getElementById("sidebar-count");
       const navHint = document.getElementById("nav-hint");
-      const promptText = document.getElementById("prompt-text");
+      const promptChoices = Array.from(document.querySelectorAll("[data-prompt-choice]"));
+      const promptChoiceNote = document.getElementById("prompt-choice-note");
       const copyButton = document.getElementById("copy-prompt");
       const copyStatus = document.getElementById("copy-status");
       const backToTop = document.getElementById("back-to-top");
       let currentStep = 0;
+      let selectedPrompt = "cat";
+
+      function selectPrompt(choice) {
+        selectedPrompt = choice;
+        const dogSelected = choice === "dog";
+        document.getElementById("cat-prompt").hidden = dogSelected;
+        document.getElementById("dog-prompt").hidden = !dogSelected;
+        promptChoices.forEach((button) => {
+          button.setAttribute("aria-pressed", String(button.dataset.promptChoice === choice));
+        });
+        promptChoiceNote.textContent = dogSelected
+          ? "といぷー駄菓子ガチャのプロンプトです。トイプードルの画像をAIチャットにも添付してください。"
+          : "にゃんこおみくじを作るプロンプトです。";
+        copyStatus.textContent = "";
+        copyButton.innerHTML = "<span aria-hidden=\"true\">▢</span> プロンプトをコピー";
+      }
 
       function showStep(index) {
         currentStep = Math.max(0, Math.min(index, steps.length - 1));
@@ -1087,7 +1481,7 @@
       }
 
       async function copyPrompt() {
-        const prompt = promptText.textContent.trim();
+        const prompt = document.getElementById(`${selectedPrompt}-prompt`).textContent.trim();
         function copyWithSelection() {
           const temporaryField = document.createElement("textarea");
           temporaryField.value = prompt;
@@ -1135,6 +1529,9 @@
           showStep(Number(link.dataset.goStep));
           document.getElementById("lesson-card").scrollIntoView({ behavior: "smooth", block: "start" });
         });
+      });
+      promptChoices.forEach((button) => {
+        button.addEventListener("click", () => selectPrompt(button.dataset.promptChoice));
       });
       copyButton.addEventListener("click", copyPrompt);
       backToTop.addEventListener("click", () => {
