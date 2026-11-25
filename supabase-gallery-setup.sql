@@ -6,6 +6,8 @@ create table if not exists public.student_app_gallery (
     and project_url ~* '^https://[^[:space:]]+$'
     and project_url !~* '^https://[^/?#]*@'
   ),
+  constraint student_app_gallery_netlify_url_check
+    check (project_url ~* '^https://[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.netlify\.app(/[^[:space:]]*)?$'),
   description text not null check (char_length(btrim(description)) between 1 and 280),
   nickname text check (nickname is null or char_length(btrim(nickname)) <= 30),
   is_approved boolean not null default false,

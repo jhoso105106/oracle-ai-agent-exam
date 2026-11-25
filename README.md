@@ -50,13 +50,15 @@ python -m http.server 8000
 
 ## 受講生アプリギャラリー
 
-`hands-on.html` のギャラリーは、投稿された作品をSupabaseに保存し、管理者が承認した作品だけを公開します。フォームでは作品名・HTTPSの公開URL・紹介文・任意のニックネームを受け付けます。投稿情報は承認前もSupabaseに保存されるため、フォーム付近の説明と同意を確認してから利用してください。
+`hands-on.html` のギャラリーは、投稿された作品をSupabaseに保存し、管理者が承認した作品だけを公開します。フォームでは作品名・Netlifyの公開URL・紹介文・任意のニックネームを受け付けます。URLのホスト名が `*.netlify.app` であることをブラウザーとデータベースの両方で確認します。これはドメイン形式の確認であり、サイトの内容や安全性を自動判定するものではありません。投稿情報は承認前もSupabaseに保存されるため、フォーム付近の説明と同意を確認してから利用してください。
 
 既存の試験アプリ用Supabaseプロジェクトには [`supabase-gallery-setup.sql`](./supabase-gallery-setup.sql) だけを適用してください。これはギャラリー用テーブルとRLSポリシーのみを作成し、既存の試験進捗テーブルや回答データには触れません。新しいSupabaseプロジェクトを最初から設定する場合は、[`supabase-setup.sql`](./supabase-setup.sql) に両方の設定が含まれています。
 
+すでにギャラリーを設定済みのプロジェクトでは、URL制限を追加するため [`supabase-gallery-netlify-validation.sql`](./supabase-gallery-netlify-validation.sql) もSQL Editorで実行してください。既存の投稿はそのまま残し、新しい投稿にNetlifyのURL制限を適用します。
+
 Supabase SQL Editorで `select id, project_title, project_url, description, nickname from public.student_app_gallery where is_approved = false order by created_at;` を実行すると未承認投稿を確認できます。掲載する投稿だけ、確認したIDを指定して `update public.student_app_gallery set is_approved = true where id = <投稿ID>;` を実行してください。
 
-匿名投稿は承認待ち状態でのみ可能です。一般ユーザーは承認済み作品のみ読め、投稿の更新・削除や承認状態の変更はできません。公開フォームは誰でも送信できるため、管理者は投稿を確認し、不適切な投稿を承認しないでください。`service_role` keyやデータベースパスワードは公開サイトに設定しないでください。
+匿名投稿は承認待ち状態でのみ可能です。一般ユーザーは承認済み作品のみ読め、投稿の更新・削除や承認状態の変更はできません。公開フォームは誰でも送信できるため、Netlifyのドメインであってもリンク先の内容を管理者が確認し、不適切な投稿を承認しないでください。`service_role` keyやデータベースパスワードは公開サイトに設定しないでください。
 
 ## ファイル
 
@@ -67,3 +69,4 @@ Supabase SQL Editorで `select id, project_title, project_url, description, nick
 | `oracle_1z0_1145_1_practice_app.html` | アプリ本体のコピー |
 | `supabase-setup.sql` | 試験進捗・作品ギャラリーのテーブルとRLSポリシー |
 | `supabase-gallery-setup.sql` | 既存Supabaseプロジェクト向けのギャラリー設定 |
+| `supabase-gallery-netlify-validation.sql` | 設定済みギャラリーへのNetlify URL制限追加 |

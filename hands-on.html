@@ -1332,7 +1332,7 @@
           <div class="gallery-field full-width">
             <label for="gallery-url">アプリの公開URL <span aria-hidden="true">*</span></label>
             <input id="gallery-url" name="project_url" type="url" inputmode="url" placeholder="https://example.netlify.app" maxlength="2048" required>
-            <small>誰でも閲覧できる https:// から始まるURLを入力してください。パスワードやトークン付きURLは入力しないでください。</small>
+            <small>https://○○.netlify.app のURLだけ投稿できます。ドメインを自動確認しますが、安全性までは判定しないため、掲載前に管理者が内容を確認します。</small>
           </div>
           <div class="gallery-field full-width">
             <label for="gallery-description">作品の紹介 <span aria-hidden="true">*</span></label>
@@ -1390,10 +1390,17 @@
         return paragraph;
       }
 
-      function getHttpsUrl(value) {
+      function getNetlifyUrl(value) {
         try {
           const url = new URL(value);
-          return url.protocol === "https:" && !url.username && !url.password ? url.href : null;
+          const isNetlifySubdomain = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.netlify\.app$/.test(url.hostname);
+          return url.protocol === "https:" &&
+            isNetlifySubdomain &&
+            !url.username &&
+            !url.password &&
+            (url.port === "" || url.port === "443")
+            ? url.href
+            : null;
         } catch {
           return null;
         }
@@ -1404,7 +1411,7 @@
           console.warn("不正なギャラリー項目を表示しませんでした。");
           return null;
         }
-        const safeUrl = getHttpsUrl(item.project_url);
+        const safeUrl = getNetlifyUrl(item.project_url);
         if (!safeUrl || typeof item.project_title !== "string" || typeof item.description !== "string") {
           console.warn("不正なギャラリー項目を表示しませんでした。");
           return null;
@@ -1472,8 +1479,10 @@
         event.preventDefault();
         const formData = new FormData(galleryForm);
         const projectUrlInput = galleryForm.elements.namedItem("project_url");
-        const safeUrl = getHttpsUrl(String(formData.get("project_url") || "").trim());
-        projectUrlInput.setCustomValidity(safeUrl ? "" : "https:// から始まるURLを入力してください。");
+        const safeUrl = getNetlifyUrl(String(formData.get("project_url") || "").trim());
+        projectUrlInput.setCustomValidity(
+          safeUrl ? "" : "https:// から始まるNetlifyのURL（例：https://my-app.netlify.app）を入力してください。"
+        );
         if (!galleryForm.reportValidity()) return;
 
         const entry = {
